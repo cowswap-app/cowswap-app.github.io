@@ -1,0 +1,107 @@
+{
+ "keyword": "cow swap",
+ "h1": "CoW Swap",
+ "brand": "CoW Swap",
+ "niche": "swap",
+ "verb": "Swap",
+ "title": "CoW Swap - Open App",
+ "meta_description": "cow swap opens the CoW Protocol trading interface for intent-based swaps, limit orders, and TWAPs with MEV-aware execution.",
+ "palette": {
+  "mode": "dark",
+  "bg": "#002B5B",
+  "accent": "#65D7FF",
+  "ink": "#FFFFFF"
+ },
+ "hero_h2": "MEV-aware token trades from the official interface",
+ "hero_lead": "CoW Swap is the first trading interface built on CoW Protocol, letting users sign intents for swaps, limit orders, and TWAPs that solvers route across on-chain liquidity.",
+ "badge": "EVM DEX",
+ "widget": {
+  "from": "ETH",
+  "from_net": "Ethereum",
+  "to": "USDC",
+  "to_net": "Ethereum",
+  "action": "Open CoW Swap App"
+ },
+ "trust": [
+  "Built on CoW Protocol",
+  "Intent-based orders",
+  "Market, limit, TWAP"
+ ],
+ "what_is": "CoW Swap is the first interface built on top of CoW Protocol and a reference implementation for its intent-based trading UX. Verify that role in the <a href=\"https://docs.cow.fi/cow-protocol/tutorials/cow-swap\">official CoW Protocol docs</a> before launching the app.",
+ "how": [
+  {
+   "t": "Open the verified app",
+   "d": "Use swap.cow.fi and check the domain before connecting a wallet."
+  },
+  {
+   "t": "Connect your wallet",
+   "d": "Choose an injected wallet, Safe, WalletConnect-compatible mobile wallet, or supported hardware wallet path."
+  },
+  {
+   "t": "Set the order",
+   "d": "Pick the network, sell token, buy token, amount, and order type such as swap, limit, or TWAP."
+  },
+  {
+   "t": "Review and sign",
+   "d": "Check output, expiry, slippage, and approval prompts, then sign the intent from your wallet."
+  }
+ ],
+ "points": [
+  {
+   "h": "Intent-based execution",
+   "p": "Instead of sending an immediate on-chain swap transaction, users sign an intent and solvers compete to execute it through available routes."
+  },
+  {
+   "h": "Built for user protection",
+   "p": "The protocol documentation highlights MEV protection and price improvement as core benefits of the <a href=\"https://docs.cow.fi/category/benefits\">CoW Protocol model</a>."
+  },
+  {
+   "h": "Familiar DeFi flow",
+   "p": "The app supports common wallet paths and order styles while routing through CoW Protocol's solver-based settlement design."
+  }
+ ],
+ "eeat": [
+  {
+   "text": "CoW Swap docs",
+   "url": "https://docs.cow.fi/cow-protocol/tutorials/cow-swap"
+  },
+  {
+   "text": "CoW Protocol benefits",
+   "url": "https://docs.cow.fi/category/benefits"
+  },
+  {
+   "text": "Ethereum MEV overview",
+   "url": "https://ethereum.org/developers/docs/mev/"
+  }
+ ],
+ "faq": [
+  {
+   "q": "Is cow swap the official app?",
+   "a": "The action interface is hosted at <a href=\"https://swap.cow.fi/\">swap.cow.fi</a>; always verify the domain before connecting a wallet.",
+   "open": true
+  },
+  {
+   "q": "How does cow swap execute trades?",
+   "a": "Users sign trade intents, and CoW Protocol solvers compete to find execution paths rather than relying only on a direct pool swap.",
+   "open": false
+  },
+  {
+   "q": "Does cow swap support limit orders?",
+   "a": "Yes. The CoW Protocol docs list market swaps, limit orders, TWAP orders, native-token flows, and cross-chain swap options.",
+   "open": false
+  },
+  {
+   "q": "What wallets work with cow swap?",
+   "a": "The docs mention injected wallets, Safe, WalletConnect v2 wallets, and hardware-wallet paths through supported wallet integrations.",
+   "open": false
+  },
+  {
+   "q": "Is cow swap financial advice?",
+   "a": "No. Review token, network, approval, slippage, and order details yourself before signing; DeFi transactions carry execution and smart-contract risk.",
+   "open": false
+  }
+ ],
+ "official_url": "https://swap.cow.fi/",
+ "official_domain": "swap.cow.fi",
+ "footer_note": "This page is not the official app; verify swap.cow.fi before connecting a wallet; educational content only, not financial advice."
+}
