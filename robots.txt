@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://cowswap-app.github.io/sitemap.xml

